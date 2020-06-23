@@ -1,0 +1,7 @@
+{
+  "name": "party-crasher-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
