@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 export abstract class HeaderBaseComponent implements OnInit, OnChanges {
     @Input() public title: string;
 
-    constructor(
+    protected constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
     ) {}
