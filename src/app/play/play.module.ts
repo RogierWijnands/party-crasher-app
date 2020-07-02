@@ -1,12 +1,11 @@
 import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Tab3Page } from './tab3.page';
+import { PlayComponent } from './play.component';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
-import { Tab3PageRoutingModule } from './tab3-routing.module'
+import { PlayComponentRoutingModule } from './play-routing.module';
 import { HeaderModule } from "../header/header.module";
 
 @NgModule({
@@ -15,10 +14,9 @@ import { HeaderModule } from "../header/header.module";
         CommonModule,
         FormsModule,
         ExploreContainerComponentModule,
-        RouterModule.forChild([{path: '', component: Tab3Page}]),
-        Tab3PageRoutingModule,
-        HeaderModule,
+        PlayComponentRoutingModule,
+        HeaderModule
     ],
-  declarations: [Tab3Page]
+  declarations: [PlayComponent]
 })
-export class Tab3PageModule {}
+export class PlayModule {}
