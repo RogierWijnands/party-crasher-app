@@ -9,7 +9,7 @@ const routes: Routes = [
     children: [
       {
         path: 'play',
-        loadChildren: () => import('../play/play.module').then(m => m.PlayModule)
+        loadChildren: () => import('../play/play.module').then(m => m.PlayModule),
       },
       {
         path: 'tab2',
