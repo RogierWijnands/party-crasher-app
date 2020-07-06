@@ -9,14 +9,6 @@ ion-header {
     }
   }
 
-  &.header-collapse-condense-inactive {
-    .header-menu-link {
-      .header-menu-link-icon {
-        color: var(--ion-color-primary) !important;
-      }
-    }
-  }
-
   ion-title {
     font-weight: 900;
   }
