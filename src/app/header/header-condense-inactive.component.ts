@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { HeaderBaseComponent } from "./header-base.component";
 import { ActivatedRoute, Router } from "@angular/router";
 
@@ -8,6 +8,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 })
 
 export class HeaderCondenseInactiveComponent extends HeaderBaseComponent {
+    @Input() public center = false;
+
     constructor(
         router: Router,
         activatedRoute: ActivatedRoute,

@@ -1,16 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'play-component',
   templateUrl: 'play.component.html',
 })
-export class PlayComponent implements OnInit {
+export class PlayComponent {
   public title: string;
 
   constructor() {}
-
-  ngOnInit() {
-    setTimeout(() => this.title = 'test123', 5000)
-  }
 
 }

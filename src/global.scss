@@ -27,8 +27,10 @@
 
 /* Theme */
 @import "./theme/variables";
+@import "./theme/custom-variables";
 
 /* Custom */
 @import "./assets/styles/general";
 @import "./assets/styles/header";
 @import "./assets/styles/tabs";
+@import "./assets/styles/play";

@@ -7,7 +7,7 @@ const routes: Routes = [
     path: '',
     component: PlayComponent,
     data: {
-      title: 'Play 1',
+      title: 'Party Time!',
     },
   }
 ];

@@ -1,0 +1,51 @@
+.content-inner {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  z-index: 2;
+
+  .logo {
+    margin: 0 auto;
+    width: 90vw;
+    max-width: 300px;
+    display: block;
+  }
+
+  .play-button {
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    max-width: 200px;
+    display: block;
+    font-weight: 900;
+  }
+}
+
+/* Confetti */
+[class|="confetti"] {
+  position: absolute;
+}
+$confetti-colors: (#e7a3ab, #ffe386, #addc7b, #f15562, #86fffb);
+@for $i from 0 through 150 {
+  $w: random(8);
+  $l: random(100);
+  .confetti-#{$i} {
+    width: #{$w}px;
+    height: #{$w*0.4}px;
+    background-color: nth($confetti-colors, random(5));
+    top: -10%;
+    left: unquote($l+"%");
+    opacity: random() + 0.5;
+    transform: rotate(#{random()*360}deg);
+    animation: drop-#{$i} unquote(4+random()+"s") unquote(random()+"s") infinite;
+  }
+
+  @keyframes drop-#{$i} {
+    100% {
+      top: 110%;
+      left: unquote($l+random(15)+"%");
+    }
+  }
+}
