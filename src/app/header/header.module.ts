@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { HeaderComponent } from "./header.component";
 import { IonicModule } from "@ionic/angular";
-import { HeaderCondenseComponent } from "./header-condense.component";
+import { HeaderCondenseInactiveComponent } from "./header-condense-inactive.component";
 
 @NgModule({
     imports: [
@@ -9,11 +9,11 @@ import { HeaderCondenseComponent } from "./header-condense.component";
     ],
     exports: [
         HeaderComponent,
-        HeaderCondenseComponent
+        HeaderCondenseInactiveComponent
     ],
     declarations: [
         HeaderComponent,
-        HeaderCondenseComponent
+        HeaderCondenseInactiveComponent
     ]
 })
 
