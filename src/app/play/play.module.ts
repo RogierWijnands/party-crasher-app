@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PlayComponent } from './play.component';
-import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
 import { PlayComponentRoutingModule } from './play-routing.module';
 import { HeaderModule } from "../header/header.module";
@@ -13,7 +12,6 @@ import { HeaderModule } from "../header/header.module";
         IonicModule,
         CommonModule,
         FormsModule,
-        ExploreContainerComponentModule,
         PlayComponentRoutingModule,
         HeaderModule
     ],

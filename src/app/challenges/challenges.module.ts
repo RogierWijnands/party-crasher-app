@@ -3,10 +3,8 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Tab2Page } from './tab2.page';
-import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
-
-import { Tab2PageRoutingModule } from './tab2-routing.module';
+import { ChallengesComponent } from './challenges.component';
+import { ChallengesRoutingModule } from './challenges-routing.module';
 import { HeaderModule } from "../header/header.module";
 
 @NgModule({
@@ -14,10 +12,9 @@ import { HeaderModule } from "../header/header.module";
     IonicModule,
     CommonModule,
     FormsModule,
-    ExploreContainerComponentModule,
-    Tab2PageRoutingModule,
+    ChallengesRoutingModule,
     HeaderModule
   ],
-  declarations: [Tab2Page]
+  declarations: [ChallengesComponent]
 })
-export class Tab2PageModule {}
+export class ChallengesModule {}
