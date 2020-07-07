@@ -3,9 +3,9 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Tab3Page } from './tab3.page';
+import { FriendsComponent } from './friends.component';
 
-import { Tab3PageRoutingModule } from './tab3-routing.module'
+import { FriendsRoutingModule } from './friends-routing.module'
 import { HeaderModule } from "../header/header.module";
 
 @NgModule({
@@ -13,10 +13,10 @@ import { HeaderModule } from "../header/header.module";
         IonicModule,
         CommonModule,
         FormsModule,
-        RouterModule.forChild([{path: '', component: Tab3Page}]),
-        Tab3PageRoutingModule,
+        RouterModule.forChild([{path: '', component: FriendsComponent}]),
+        FriendsRoutingModule,
         HeaderModule,
     ],
-  declarations: [Tab3Page]
+  declarations: [FriendsComponent]
 })
-export class Tab3PageModule {}
+export class FriendsModule {}

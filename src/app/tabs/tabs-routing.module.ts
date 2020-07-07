@@ -16,8 +16,8 @@ const routes: Routes = [
         loadChildren: () => import('../challenges/challenges.module').then(m => m.ChallengesModule)
       },
       {
-        path: 'tab3',
-        loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+        path: 'friends',
+        loadChildren: () => import('../friends/friends.module').then(m => m.FriendsModule)
       },
       {
         path: '',
