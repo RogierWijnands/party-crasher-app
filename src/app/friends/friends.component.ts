@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: 'friends.component.html'
 })
 export class FriendsComponent {
+  public friends: any[];
 
   constructor() {}
 

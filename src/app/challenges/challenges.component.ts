@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: 'challenges.component.html'
 })
 export class ChallengesComponent {
+  public challenges: any[];
 
   constructor() {}
 
