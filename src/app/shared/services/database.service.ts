@@ -79,11 +79,11 @@ export class DatabaseService {
         });
     }
 
-    public insertRow(tableName: DatabaseTableName, colNames: string[], values: any[]): Observable<void> {
+    public insertRow(tableName: DatabaseTableName, values: {[key: string]: any}): Observable<void> {
         return new Observable((observer) => {
             // Wait for table to be ready
             const tableSubscription = this.initDatabaseTable(tableName).subscribe(() => {
-                this.database.executeSql(`INSERT INTO ${tableName} (${colNames.join()}) VALUES (${values.join})`, [])
+                this.database.executeSql(`INSERT INTO ${tableName} (${Object.keys(values).join()}) VALUES (${Object.values(values).join()})`, [])
                     .then(() => {
                         observer.next();
                     })
@@ -100,14 +100,14 @@ export class DatabaseService {
         });
     }
 
-    public updateRow(tableName: DatabaseTableName, colNames: string[], values: any[], id: string | number): Observable<void> {
+    public updateRow(tableName: DatabaseTableName, values: {[key: string]: any}, id: string | number): Observable<void> {
         return new Observable((observer) => {
             // Wait for table to be ready
             const tableSubscription = this.initDatabaseTable(tableName).subscribe(() => {
                 let query = `UPDATE ${tableName} SET`;
-                colNames.forEach((colName, i) => {
-                    query += ` ${colName} = ${values[i]}`;
-                    if (i !== (colNames.length - 1)) {
+                Object.keys(values).forEach((key, i) => {
+                    query += ` ${key} = ${values[key]}`;
+                    if (i !== (Object.keys(values).length - 1)) {
                         query += ',';
                     }
                 });
