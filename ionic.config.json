@@ -1,7 +1,8 @@
 {
   "name": "party-crasher-app",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }
