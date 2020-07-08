@@ -29,6 +29,9 @@
 @import "./theme/variables";
 @import "./theme/custom-variables";
 
+/* Third-party plugins */
+@import '~ngx-toastr/toastr';
+
 /* Custom */
 @import "./assets/styles/general";
 @import "./assets/styles/header";

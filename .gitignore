@@ -6,3 +6,7 @@ node_modules/
 
 # Cordova plugins
 plugins/
+
+# Builds
+dist/
+www/
