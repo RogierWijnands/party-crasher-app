@@ -1,0 +1,7 @@
+<header-component [title]="'Start party'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
+
+<ion-content [fullscreen]="true">
+    <form #startPartyForm="ngForm" (submit)="save()">
+        <ion-button color="secondary" shape="round" class="button-bottom-center" type="submit" [disabled]="startPartyForm.invalid">Ready, set, go!</ion-button>
+    </form>
+</ion-content>

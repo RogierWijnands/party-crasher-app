@@ -4,7 +4,7 @@ import { Friend } from '../shared/models/friend.model';
 import { FriendsService } from '../shared/services/friends.service';
 
 @Component({
-  selector: 'add-friend-component',
+  selector: 'friend-detail-component',
   templateUrl: 'friend.detail.component.html'
 })
 export class FriendDetailComponent {

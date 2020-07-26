@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PlayComponent } from './play.component';
+import { PlayDetailComponent } from './play.detail.component';
 
 import { PlayComponentRoutingModule } from './play-routing.module';
 import { HeaderModule } from "../header/header.module";
@@ -15,6 +16,9 @@ import { HeaderModule } from "../header/header.module";
         PlayComponentRoutingModule,
         HeaderModule
     ],
-  declarations: [PlayComponent]
+  declarations: [
+    PlayComponent,
+    PlayDetailComponent,
+  ]
 })
 export class PlayModule {}
