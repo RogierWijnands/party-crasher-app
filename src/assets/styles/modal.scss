@@ -3,8 +3,8 @@ ion-modal {
     @media (max-width: 767px) {
         .modal-wrapper {
             --height: calc(100% - 50px);
-            --border-radius: 20px 20px 0 0;
             --overflow: visible;
+            --background: transparent;
             margin-bottom: -50px;
 
             // Swipe close indicator
@@ -20,11 +20,16 @@ ion-modal {
                 background-color: rgba(var(--ion-color-light-rgb), 0.5);
                 border-radius: 3px;
             }
+
+            .ion-page {
+                border-radius: 20px !important;
+            }
         }
     
         .modal-shadow {
             --height: calc(100% - 100px);
             margin-bottom: -100px;
+            background: var(--ion-color-primary) !important;
         }   
     }
 }
