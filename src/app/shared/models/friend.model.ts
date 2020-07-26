@@ -4,7 +4,7 @@ export class Friend {
     public middleName: string;
     public lastName: string;
 
-    constructor(friend: Friend) {
+    constructor(friend: {[key: string]: any} = {}) {
         this.setId(friend.id);
         this.setFirstName(friend.firstName);
         this.setMiddleName(friend.middleName);
