@@ -3,7 +3,9 @@
 <ion-content [fullscreen]="true">
   <header-condense-inactive-component [title]="'Friends'"></header-condense-inactive-component>
   <div *ngIf="!friends" class="no-items-message">No friends added yet</div>
-  <div class="add-item-button">
-    <ion-icon name="add-outline" color="primary" class="add-item-button-icon"></ion-icon>
-  </div>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="secondary">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
