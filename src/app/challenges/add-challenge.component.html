@@ -1,5 +1,13 @@
 <header-component [title]="'Add challenge'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
 
 <ion-content [fullscreen]="true">
-    
+    <form>
+        <ion-item color="primary">
+            <small>Type [user] to insert a player reference in a challenge.</small>
+            <ion-label position="floating">Challenge</ion-label>
+            <ion-textarea autoGrow="true"></ion-textarea>
+        </ion-item>
+
+        <ion-button color="secondary" shape="round" class="button-bottom-center">Add challenge</ion-button>
+    </form>
 </ion-content>

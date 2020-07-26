@@ -1,5 +1,17 @@
 <header-component [title]="'Add friend'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
 
 <ion-content [fullscreen]="true">
+    <form>
+        <ion-item color="primary">
+            <ion-label position="floating">First name</ion-label>
+            <ion-input></ion-input>
+        </ion-item>
     
+        <ion-item color="primary">
+            <ion-label position="floating">Last name</ion-label>
+            <ion-input></ion-input>
+        </ion-item>
+
+        <ion-button color="secondary" shape="round" class="button-bottom-center">Add friend</ion-button>
+    </form>
 </ion-content>
