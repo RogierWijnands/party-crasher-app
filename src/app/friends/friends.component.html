@@ -4,7 +4,7 @@
   <header-condense-inactive-component [title]="'Friends'"></header-condense-inactive-component>
   <div *ngIf="!friends" class="no-items-message">No friends added yet</div>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="secondary">
+    <ion-fab-button color="secondary" (click)="openModal()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>

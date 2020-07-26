@@ -1,8 +1,11 @@
-import { Input, OnInit } from "@angular/core";
+import { Input, OnInit, Output } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { EventEmitter } from '@angular/core';
 
 export abstract class HeaderBaseComponent implements OnInit {
     @Input() public title: string;
+    @Input() public isModal: boolean;
+    @Output() public onModalClose: EventEmitter<void> = new EventEmitter();
 
     protected constructor(
         private router: Router,
@@ -17,5 +20,9 @@ export abstract class HeaderBaseComponent implements OnInit {
                 }
             }
         });
+    }
+
+    public closeModal(): void {
+        this.onModalClose.emit();
     }
 }

@@ -4,9 +4,14 @@
             <strong>{{ title }}</strong>
         </ion-title>
         <ion-buttons slot="end">
-            <ion-button class="header-menu-link" color="secondary">
-                <ion-icon name="ellipsis-vertical-outline" class="header-menu-link-icon"></ion-icon>
-            </ion-button>
+            <ng-container *ngIf="isModal; else headerMenu">
+                <ion-button color="secondary" (click)="closeModal()">Close</ion-button>
+            </ng-container>
+            <ng-template #headerMenu>
+                <ion-button class="header-menu-link" color="secondary">
+                    <ion-icon name="ellipsis-vertical-outline" class="header-menu-link-icon"></ion-icon>
+                </ion-button>
+            </ng-template>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
