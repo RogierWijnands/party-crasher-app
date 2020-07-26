@@ -1,7 +1,7 @@
 <header-component [title]="'Add friend'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
 
 <ion-content [fullscreen]="true">
-    <form #addFriendForm="ngForm" (submit)="friendService.addFriend(friend)">
+    <form #addFriendForm="ngForm" (submit)="friendService.save(friend); closeModal();">
         <ion-item color="primary">
             <ion-label position="floating">First name</ion-label>
             <ion-input name="firstName" [(ngModel)]="friend.firstName" required></ion-input>
@@ -17,6 +17,6 @@
             <ion-input name="lastName" [(ngModel)]="friend.lastName"></ion-input>
         </ion-item>
 
-        <ion-button color="secondary" shape="round" class="button-bottom-center" type="submit" [disabled]="addFriendForm.invalid">Add friend</ion-button>
+        <ion-button color="secondary" shape="round" class="button-bottom-center" type="submit" [disabled]="addFriendForm.invalid">Save friend</ion-button>
     </form>
 </ion-content>

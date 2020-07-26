@@ -8,7 +8,7 @@ import { FriendsService } from '../shared/services/friends.service';
   templateUrl: 'add-friend.component.html'
 })
 export class AddFriendComponent {
-  public friend: Friend = new Friend();
+  @Input() public friend: Friend = new Friend();
 
   constructor(
       private modalController: ModalController,
