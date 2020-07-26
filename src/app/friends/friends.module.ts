@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FriendsComponent } from './friends.component';
-import { AddFriendComponent } from './add-friend.component';
+import { FriendDetailComponent } from './friend.detail.component';
 
 import { FriendsRoutingModule } from './friends-routing.module'
 import { HeaderModule } from "../header/header.module";
@@ -20,7 +20,7 @@ import { HeaderModule } from "../header/header.module";
     ],
   declarations: [
     FriendsComponent,
-    AddFriendComponent,
+    FriendDetailComponent,
   ]
 })
 export class FriendsModule {}

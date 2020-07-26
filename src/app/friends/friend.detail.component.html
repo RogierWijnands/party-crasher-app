@@ -1,7 +1,7 @@
 <header-component [title]="(friend && friend.id) ? friend.getFullName() : 'Add friend'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
 
 <ion-content [fullscreen]="true">
-    <form #addFriendForm="ngForm" (submit)="friendService.save(friend); closeModal();">
+    <form #addFriendForm="ngForm" (submit)="save();">
         <ion-item color="primary">
             <ion-label position="floating">First name</ion-label>
             <ion-input name="firstName" [(ngModel)]="friend.firstName" required></ion-input>

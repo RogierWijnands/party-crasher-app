@@ -1,10 +1,9 @@
 import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChallengesComponent } from './challenges.component';
-import { AddChallengeComponent } from './add-challenge.component';
+import { ChallengeDetailComponent } from './challenge.detail.component';
 import { ChallengesRoutingModule } from './challenges-routing.module';
 import { HeaderModule } from "../header/header.module";
 
@@ -18,7 +17,7 @@ import { HeaderModule } from "../header/header.module";
   ],
   declarations: [
     ChallengesComponent,
-    AddChallengeComponent,
+    ChallengeDetailComponent,
   ]
 })
 export class ChallengesModule {}

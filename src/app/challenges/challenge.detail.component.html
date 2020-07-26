@@ -1,7 +1,7 @@
 <header-component [title]="(challenge && challenge.id) ? challenge.title : 'Add challenge'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
 
 <ion-content [fullscreen]="true">
-    <form #addChallengeForm="ngForm" (submit)="challengeService.save(challenge); closeModal();">
+    <form #addChallengeForm="ngForm" (submit)="save()">
         <ion-item color="primary">
             <ion-label position="floating">Title</ion-label>
             <ion-input name="title" [(ngModel)]="challenge.title" required></ion-input>

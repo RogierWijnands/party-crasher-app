@@ -5,9 +5,9 @@ import { FriendsService } from '../shared/services/friends.service';
 
 @Component({
   selector: 'add-friend-component',
-  templateUrl: 'add-friend.component.html'
+  templateUrl: 'friend.detail.component.html'
 })
-export class AddFriendComponent {
+export class FriendDetailComponent {
   @Input() public friend: Friend = new Friend();
 
   constructor(
@@ -15,7 +15,13 @@ export class AddFriendComponent {
       public friendService: FriendsService,
   ) {}
 
-  public closeModal(): void {
-      this.modalController.dismiss();
+  public closeModal(data?: {[key: string]: any}): void {
+      this.modalController.dismiss(data);
+  }
+
+  public save(): void {
+    this.friendService.save(this.friend).subscribe(() => {
+      this.closeModal({ 'saved': true });
+    });
   }
 }

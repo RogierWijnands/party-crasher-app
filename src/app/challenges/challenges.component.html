@@ -2,19 +2,18 @@
 
 <ion-content [fullscreen]="true">
   <header-condense-inactive-component [title]="'Challenges'"></header-condense-inactive-component>
-  <ng-container *ngIf="(challengeService.challenges$ | async) as challenges">
-    <ion-list *ngIf="challenges && challenges.length; else noItems">
-      <ion-item-sliding *ngFor="let challenge of challenges" color="primary">
-        <ion-item color="primary" (click)="openModal(challenge)">
-          <ion-label>{{ challenge.title }}</ion-label>
-        </ion-item>
-        <ion-item-options side="end">
-          <ion-item-option color="warning" (click)="openModal(challenge)">Edit</ion-item-option>
-          <ion-item-option color="danger" (click)="challengeService.delete(challenge)">Delete</ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
-  </ng-container>
+  
+  <ion-list *ngIf="challenges && challenges.length; else noItems">
+    <ion-item-sliding *ngFor="let challenge of challenges" color="primary">
+      <ion-item color="primary" (click)="openModal(challenge)">
+        <ion-label>{{ challenge.title }}</ion-label>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option color="warning" (click)="openModal(challenge)">Edit</ion-item-option>
+        <ion-item-option color="danger" (click)="delete(challenge)">Delete</ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
   <ng-template #noItems>
     <div class="no-items-message">No challenges added yet</div>
   </ng-template>

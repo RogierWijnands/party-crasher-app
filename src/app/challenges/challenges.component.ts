@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { AddChallengeComponent } from './add-challenge.component';
+import { ChallengeDetailComponent } from './challenge.detail.component';
 import { ChallengeService } from '../shared/services/challenge.service';
 import { Challenge } from '../shared/models/challenge.model';
 import { ModalOptions } from '@ionic/core';
@@ -9,24 +9,49 @@ import { ModalOptions } from '@ionic/core';
   selector: 'challenges-component',
   templateUrl: 'challenges.component.html'
 })
-export class ChallengesComponent {
-  public challenges: any[];
+export class ChallengesComponent implements OnInit {
+  public challenges: Challenge[];
 
   constructor(
     private modalController: ModalController,
     public challengeService: ChallengeService,
   ) {}
 
+  ngOnInit() {
+    this.fetchData();
+  }
+
+  private fetchData(): void {
+    this.challengeService.getAll().subscribe((data) => {
+      this.challenges = data;
+    });
+  }
+
+  public delete(challenge: Challenge): void {
+    this.challengeService.delete(challenge).subscribe((data) => {
+      this.fetchData();
+    });
+  }
+
   public async openModal(challenge?: Challenge) {
     const options: ModalOptions = {
-      component: AddChallengeComponent,
+      component: ChallengeDetailComponent,
       swipeToClose: true,
     };
     if (challenge) {
       options.componentProps = {challenge};
     }
     const modal = await this.modalController.create(options);
-    return await modal.present();
+    await modal.present();
+
+    const {data} = await modal.onWillDismiss();
+    if (data?.saved) {
+      this.onModalClose();
+    }
+  }
+
+  private onModalClose(): void {
+    this.fetchData();
   }
 
 }

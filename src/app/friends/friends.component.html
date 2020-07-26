@@ -2,19 +2,17 @@
 
 <ion-content [fullscreen]="true">
   <header-condense-inactive-component [title]="'Friends'"></header-condense-inactive-component>
-  <ng-container *ngIf="(friendsService.friends$ | async) as friends;">
-    <ion-list *ngIf="friends && friends.length; else noItems">
-      <ion-item-sliding *ngFor="let friend of friends" color="primary">
-        <ion-item color="primary" (click)="openModal(friend)">
-          <ion-label>{{ friend.getFullName() }}</ion-label>
-        </ion-item>
-        <ion-item-options side="end">
-          <ion-item-option color="warning" (click)="openModal(friend)">Edit</ion-item-option>
-          <ion-item-option color="danger" (click)="friendsService.delete(friend)">Delete</ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
-  </ng-container>
+  <ion-list *ngIf="friends && friends.length; else noItems">
+    <ion-item-sliding *ngFor="let friend of friends" color="primary">
+      <ion-item color="primary" (click)="openModal(friend)">
+        <ion-label>{{ friend.getFullName() }}</ion-label>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option color="warning" (click)="openModal(friend)">Edit</ion-item-option>
+        <ion-item-option color="danger" (click)="delete(friend)">Delete</ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
   <ng-template #noItems>
     <div class="no-items-message">No friends added yet</div>
   </ng-template>

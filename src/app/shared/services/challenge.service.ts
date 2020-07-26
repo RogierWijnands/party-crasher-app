@@ -1,5 +1,5 @@
 import { DatabaseService } from './database.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { DatabaseTableName } from '../enum';
 import { Challenge } from '../models/challenge.model';
@@ -8,28 +8,37 @@ import { Challenge } from '../models/challenge.model';
     providedIn: 'root'
 })
 export class ChallengeService {
-    public challenges$: BehaviorSubject<Challenge[]> = new BehaviorSubject([]);
-
     constructor(
         private databaseService: DatabaseService
     ) {}
 
-    public save(challenge: Challenge): void {
-        console.log(challenge);
-        if (challenge.id) {
-            this.databaseService.updateRow(DatabaseTableName.CHALLENGES, challenge, challenge.id).subscribe(() => this.getAll());
-        } else {
-            this.databaseService.insertRow(DatabaseTableName.CHALLENGES, challenge).subscribe(() => this.getAll());
-        }
+    public save(challenge: Challenge): Observable<void> {
+        return new Observable((observer) => {
+            if (challenge.id) {
+                this.databaseService.updateRow(DatabaseTableName.CHALLENGES, challenge, challenge.id).subscribe(() => {
+                    observer.next()
+                });
+            } else {
+                this.databaseService.insertRow(DatabaseTableName.CHALLENGES, challenge).subscribe(() => {
+                    observer.next();
+                });
+            }
+        });
     }
 
-    public delete(challenge: Challenge): void {
-        this.databaseService.deleteRow(DatabaseTableName.CHALLENGES, challenge.id).subscribe(() => this.getAll());
+    public delete(challenge: Challenge): Observable<void> {
+        return new Observable((observer) => {
+            this.databaseService.deleteRow(DatabaseTableName.CHALLENGES, challenge.id).subscribe(() => {
+                observer.next();
+            });
+        });
     }
 
-    public getAll(): void {
-        this.databaseService.getRows(DatabaseTableName.CHALLENGES).subscribe((res: any) => {
-            this.challenges$.next(Array.from(res.rows).map(challenge => new Challenge(challenge)).sort((a, b) => a.title.localeCompare(b.title)));
+    public getAll(): Observable<Challenge[]> {
+        return new Observable((observer) => {
+            this.databaseService.getRows(DatabaseTableName.CHALLENGES).subscribe((res: any) => {
+                observer.next(Array.from(res.rows).map(challenge => new Challenge(challenge)).sort((a, b) => a.title.localeCompare(b.title)));
+            });
         });
     }
 }
