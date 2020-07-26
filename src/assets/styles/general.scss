@@ -1,7 +1,27 @@
+$sizes: xs, sm, md, lg, xl, xxl;
+$directions: top, right, bottom, left;
+
 ion-content {
   --background: var(--ion-color-primary);
 }
 
 .bold {
   font-weight: 900;
+}
+
+.italic {
+  font-style: italic;
+}
+
+@each $direction in $directions {
+  $spacer: 0;
+  @each $size in $sizes {
+    $spacer: $spacer + 5;
+    .spacer-#{$direction}-#{$size} {
+      margin-#{$direction}: #{$spacer}px;
+    }
+    .padding-#{$direction}-#{$size} {
+      padding-#{$direction}: #{$spacer}px;
+    }
+  }
 }

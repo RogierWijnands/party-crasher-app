@@ -9,3 +9,11 @@
     color: var(--ion-color-secondary);
     font-weight: 900;
 }
+
+ion-list.sliding-list {
+    background: var(--ion-color-primary-shade);
+
+    ion-item-options {
+        border: none;
+    }
+}

@@ -7,9 +7,9 @@
             <ion-input name="title" [(ngModel)]="tempChallenge.title" required></ion-input>
         </ion-item>
         <ion-item color="primary">
+            <small class="spacer-top-md italic">Type [player] in the description to insert a player reference in a challenge. For example: "[player] has to finish his drink!"</small>
             <ion-label position="floating">Description</ion-label>
             <ion-textarea autoGrow="true" name="description" [(ngModel)]="tempChallenge.description" required></ion-textarea>
-            <small>Type [player] to insert a player reference in a challenge. For example: "[player] has to finish his drink!"</small>
         </ion-item>
 
         <ion-button color="secondary" shape="round" class="button-bottom-center" type="submit" [disabled]="addChallengeForm.invalid">Save challenge</ion-button>
