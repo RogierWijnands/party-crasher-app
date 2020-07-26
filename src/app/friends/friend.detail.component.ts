@@ -8,7 +8,10 @@ import { FriendsService } from '../shared/services/friends.service';
   templateUrl: 'friend.detail.component.html'
 })
 export class FriendDetailComponent {
-  @Input() public friend: Friend = new Friend();
+  public tempFriend: Friend = new Friend();
+  @Input('friend') set friend(_friend: Friend) {
+    this.tempFriend = new Friend(_friend);
+  }
 
   constructor(
       private modalController: ModalController,
@@ -20,7 +23,7 @@ export class FriendDetailComponent {
   }
 
   public save(): void {
-    this.friendService.save(this.friend).subscribe(() => {
+    this.friendService.save(this.tempFriend).subscribe(() => {
       this.closeModal({ 'saved': true });
     });
   }

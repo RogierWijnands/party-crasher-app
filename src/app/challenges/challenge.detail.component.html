@@ -1,14 +1,14 @@
-<header-component [title]="(challenge && challenge.id) ? challenge.title : 'Add challenge'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
+<header-component [title]="(tempChallenge && tempChallenge.id) ? tempChallenge.title : 'Add challenge'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
 
 <ion-content [fullscreen]="true">
     <form #addChallengeForm="ngForm" (submit)="save()">
         <ion-item color="primary">
             <ion-label position="floating">Title</ion-label>
-            <ion-input name="title" [(ngModel)]="challenge.title" required></ion-input>
+            <ion-input name="title" [(ngModel)]="tempChallenge.title" required></ion-input>
         </ion-item>
         <ion-item color="primary">
             <ion-label position="floating">Description</ion-label>
-            <ion-textarea autoGrow="true" name="description" [(ngModel)]="challenge.description" required></ion-textarea>
+            <ion-textarea autoGrow="true" name="description" [(ngModel)]="tempChallenge.description" required></ion-textarea>
             <small>Type [player] to insert a player reference in a challenge. For example: "[player] has to finish his drink!"</small>
         </ion-item>
 

@@ -8,7 +8,10 @@ import { Challenge } from '../shared/models/challenge.model';
   templateUrl: 'challenge.detail.component.html'
 })
 export class ChallengeDetailComponent {
-  @Input() public challenge: Challenge = new Challenge();
+  public tempChallenge: Challenge = new Challenge();
+  @Input('challenge') set challenge(_challenge: Challenge) {
+    this.tempChallenge = new Challenge(_challenge);
+  }
 
   constructor(
       private modalController: ModalController,
@@ -20,7 +23,7 @@ export class ChallengeDetailComponent {
   }
 
   public save(): void {
-    this.challengeService.save(this.challenge).subscribe(() => {
+    this.challengeService.save(this.tempChallenge).subscribe(() => {
       this.closeModal({ 'saved': true });
     });
   }
