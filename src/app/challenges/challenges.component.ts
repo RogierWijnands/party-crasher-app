@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { ChallengeDetailComponent } from './challenge.detail.component';
 import { ChallengeService } from '../shared/services/challenge.service';
 import { Challenge } from '../shared/models/challenge.model';
@@ -14,7 +14,8 @@ export class ChallengesComponent implements OnInit {
 
   constructor(
     private modalController: ModalController,
-    public challengeService: ChallengeService,
+    private alertController: AlertController,
+    private challengeService: ChallengeService,
   ) {}
 
   ngOnInit() {
@@ -27,7 +28,27 @@ export class ChallengesComponent implements OnInit {
     });
   }
 
-  public delete(challenge: Challenge): void {
+  public async promptDelete(challenge: Challenge) {
+    const alert = await this.alertController.create({
+      header: 'Confirm',
+      message: `Are you sure you want to delete <strong>${challenge.title}</strong>?`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        }, {
+          text: 'Delete',
+          handler: () => {
+            this.delete(challenge);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  private delete(challenge: Challenge): void {
     this.challengeService.delete(challenge).subscribe((data) => {
       this.fetchData();
     });
