@@ -1,13 +1,17 @@
-<header-component [title]="'Add challenge'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
+<header-component [title]="(challenge && challenge.id) ? challenge.title : 'Add challenge'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
 
 <ion-content [fullscreen]="true">
-    <form>
+    <form #addChallengeForm="ngForm" (submit)="challengeService.save(challenge); closeModal();">
         <ion-item color="primary">
+            <ion-label position="floating">Title</ion-label>
+            <ion-input name="title" [(ngModel)]="challenge.title" required></ion-input>
+        </ion-item>
+        <ion-item color="primary">
+            <ion-label position="floating">Description</ion-label>
+            <ion-textarea autoGrow="true" name="description" [(ngModel)]="challenge.description" required></ion-textarea>
             <small>Type [player] to insert a player reference in a challenge. For example: "[player] has to finish his drink!"</small>
-            <ion-label position="floating">Challenge</ion-label>
-            <ion-textarea autoGrow="true"></ion-textarea>
         </ion-item>
 
-        <ion-button color="secondary" shape="round" class="button-bottom-center">Add challenge</ion-button>
+        <ion-button color="secondary" shape="round" class="button-bottom-center" type="submit" [disabled]="addChallengeForm.invalid">Save challenge</ion-button>
     </form>
 </ion-content>

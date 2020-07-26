@@ -1,4 +1,4 @@
-<header-component [title]="'Add friend'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
+<header-component [title]="(friend && friend.id) ? friend.getFullName() : 'Add friend'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
 
 <ion-content [fullscreen]="true">
     <form #addFriendForm="ngForm" (submit)="friendService.save(friend); closeModal();">
