@@ -6,6 +6,16 @@
     <span *ngFor="let confetti of [].constructor(150); let i = index" class="confetti-{{i}}"></span>
     <header-condense-inactive-component [title]="''"></header-condense-inactive-component>
     <img src="../../assets/img/logo.png" alt="Party Crasher logo" class="logo">
-    <ion-button color="secondary" shape="round" class="play-button button-bottom-center" (click)="openModal()">Start a party</ion-button>
+
+    <ng-container *ngIf="(gameService.mode$ | async) as mode">
+      <ng-container *ngIf="mode === GameMode.NOT_IN_PROGRESS">
+        <ion-button color="secondary" shape="round" class="play-button button-bottom-center" (click)="openModal()">Start a party</ion-button>
+      </ng-container>
+    
+      <ng-container *ngIf="mode === GameMode.IN_PROGRESS">
+        Game in progress!
+        {{ (gameService.getGame() | async) | json }}
+      </ng-container>
+    </ng-container>
   </div>
 </ion-content>
