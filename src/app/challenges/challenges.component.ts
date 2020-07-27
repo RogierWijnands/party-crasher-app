@@ -67,11 +67,11 @@ export class ChallengesComponent implements OnInit {
 
     const {data} = await modal.onWillDismiss();
     if (data?.saved) {
-      this.onModalClose();
+      this.onItemSaved();
     }
   }
 
-  private onModalClose(): void {
+  private onItemSaved(): void {
     this.fetchData();
   }
 
