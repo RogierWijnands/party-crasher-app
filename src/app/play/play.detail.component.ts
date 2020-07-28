@@ -12,7 +12,10 @@ import { GameService } from '../shared/services/game.service';
   templateUrl: 'play.detail.component.html'
 })
 export class PlayDetailComponent implements OnInit {
-  @Input() public game: Game = new Game();
+  public tempGame: Game = new Game();
+  @Input('game') set game(_game: Game) {
+    this.tempGame = new Game(_game);
+  }
   public friends: Friend[] = [];
   public challenges: Challenge[] = [];
 
@@ -28,9 +31,9 @@ export class PlayDetailComponent implements OnInit {
 
     this.challengeService.getAll().subscribe(challenges => {
       (this.challenges = challenges).forEach(challenge => {
-        if (!this.game.challenges) this.game.challenges = [];
+        if (!this.tempGame.challenges) this.tempGame.challenges = [];
         // Select all by default
-        this.game.challenges.push(challenge);
+        this.tempGame.challenges.push(challenge);
       });
     });
   }
@@ -40,6 +43,6 @@ export class PlayDetailComponent implements OnInit {
   }
 
   public save(): void {
-    this.gameService.startGame(this.game).subscribe(() => this.closeModal());
+    this.gameService.startGame(this.tempGame).subscribe(() => this.closeModal());
   }
 }

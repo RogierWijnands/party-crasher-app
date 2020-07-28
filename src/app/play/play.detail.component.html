@@ -1,31 +1,31 @@
-<header-component [title]="'Start party'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
+<header-component [title]="(tempGame.title) ? tempGame.title : 'Start party'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
 
 <ion-content [fullscreen]="true">
     <form #startPartyForm="ngForm" (submit)="save()">
         <ion-item color="primary">
             <ion-label position="floating">Title</ion-label>
-            <ion-input name="title" [(ngModel)]="game.title" required></ion-input>
+            <ion-input name="title" [(ngModel)]="tempGame.title" required></ion-input>
         </ion-item>
         <ion-item color="primary">
             <ion-label position="floating">Start time</ion-label>
-            <ion-datetime displayFormat="D MMM YYYY H:mm" name="startDateTime" [(ngModel)]="game.startDateTime" required></ion-datetime>
+            <ion-datetime displayFormat="D MMM YYYY H:mm" name="startDateTime" [(ngModel)]="tempGame.startDateTime" required></ion-datetime>
         </ion-item>
         <ion-item color="primary">
             <ion-label position="floating">End time</ion-label>
-            <ion-datetime displayFormat="D MMM YYYY H:mm" name="endDateTime" [(ngModel)]="game.endDateTime" required></ion-datetime>
+            <ion-datetime displayFormat="D MMM YYYY H:mm" name="endDateTime" [(ngModel)]="tempGame.endDateTime" required></ion-datetime>
         </ion-item>
         <ion-item color="primary">
             <ion-label position="floating">Who's playing?</ion-label>
-            <ion-select placeholder="Select friends" multiple="true" cancelText="Cancel" okText="Done" name="players" [(ngModel)]="game.players">
+            <ion-select placeholder="Select friends" multiple="true" cancelText="Cancel" okText="Done" name="players" [(ngModel)]="tempGame.players">
                 <ion-select-option *ngFor="let friend of friends" [value]="friend" required>{{friend.getFullName()}}</ion-select-option>
             </ion-select>
         </ion-item>
         <ion-item color="primary">
             <ion-label position="floating">Challenges</ion-label>
-            <ion-select placeholder="Select challenges" multiple="true" cancelText="Cancel" okText="Done" name="challenges" [(ngModel)]="game.challenges">
+            <ion-select placeholder="Select challenges" multiple="true" cancelText="Cancel" okText="Done" name="challenges" [(ngModel)]="tempGame.challenges">
                 <ion-select-option *ngFor="let challenge of challenges" [value]="challenge" required>{{challenge.title}}</ion-select-option>
             </ion-select>
         </ion-item>
-        <ion-button color="secondary" shape="round" class="button-bottom-center" type="submit" [disabled]="startPartyForm.invalid || !game.challenges || !game.challenges.length || !game.players || !game.players.length">Ready, set, go!</ion-button>
+        <ion-button color="secondary" shape="round" class="button-bottom-center" type="submit" [disabled]="startPartyForm.invalid || !tempGame.challenges || !tempGame.challenges.length || !tempGame.players || !tempGame.players.length">Ready, set, go!</ion-button>
     </form>
 </ion-content>
