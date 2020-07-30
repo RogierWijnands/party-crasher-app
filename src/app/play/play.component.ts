@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ModalOptions } from '@ionic/core';
 import { PlayDetailComponent } from './play.detail.component';
-import { GameMode } from '../shared/enum';
 import { GameService } from '../shared/services/game.service';
 
 @Component({
@@ -10,7 +9,6 @@ import { GameService } from '../shared/services/game.service';
   templateUrl: 'play.component.html',
 })
 export class PlayComponent {
-  public readonly GameMode = GameMode;
   public title: string;
 
   constructor(

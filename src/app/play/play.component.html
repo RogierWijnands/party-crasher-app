@@ -4,17 +4,17 @@
 
   <div class="content-inner">
     <span *ngFor="let confetti of [].constructor(150); let i = index" class="confetti-{{i}}"></span>
-    <header-condense-inactive-component [title]="''"></header-condense-inactive-component>
-    <img src="../../assets/img/logo.png" alt="Party Crasher logo" class="logo">
 
-    <ng-container *ngIf="(gameService.mode$ | async) as mode">
-      <ng-container *ngIf="mode === GameMode.NOT_IN_PROGRESS">
+    <ng-container *ngIf="(gameService.game$ | async) as game">
+      <ng-container *ngIf="!game">
+        <header-condense-inactive-component [title]="''"></header-condense-inactive-component>
+        <img src="../../assets/img/logo.png" alt="Party Crasher logo" class="logo">
         <ion-button color="secondary" shape="round" class="play-button button-bottom-center" (click)="openModal()">Start a party</ion-button>
       </ng-container>
-    
-      <ng-container *ngIf="mode === GameMode.IN_PROGRESS">
+      <ng-container *ngIf="game">
+        <header-condense-inactive-component [title]="game.title"></header-condense-inactive-component>
         Game in progress!
-        {{ (gameService.getGame() | async) | json }}
+        {{ game | json }}
       </ng-container>
     </ng-container>
   </div>
