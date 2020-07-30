@@ -3,6 +3,7 @@ import { HeaderComponent } from "./header.component";
 import { IonicModule } from "@ionic/angular";
 import { HeaderCondenseInactiveComponent } from "./header-condense-inactive.component";
 import { CommonModule } from "@angular/common";
+import { HeaderPopoverMenuComponent } from './header-popover-menu.component';
 
 @NgModule({
     imports: [
@@ -15,7 +16,8 @@ import { CommonModule } from "@angular/common";
     ],
     declarations: [
         HeaderComponent,
-        HeaderCondenseInactiveComponent
+        HeaderCondenseInactiveComponent,
+        HeaderPopoverMenuComponent,
     ]
 })
 

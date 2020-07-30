@@ -3,7 +3,9 @@
 <ion-content [fullscreen]="true">
 
   <div class="content-inner">
-    <span *ngFor="let confetti of [].constructor(150); let i = index" class="confetti-{{i}}"></span>
+    <div class="confetti-wrapper">
+      <span *ngFor="let confetti of [].constructor(150); let i = index" class="confetti-{{i}}"></span>
+    </div>
 
     <ng-container *ngIf="(gameService.game$ | async) as game; else noGame">
       <header-condense-inactive-component [title]="(moment(game.startDateTime).isAfter(moment())) ? 'Coming up...' : 'In progress...'"></header-condense-inactive-component>

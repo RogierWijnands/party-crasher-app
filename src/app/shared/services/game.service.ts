@@ -11,7 +11,7 @@ import * as moment from 'moment';
 export class GameService {
     private game: BehaviorSubject<Game|undefined> = new BehaviorSubject(undefined);
     private isGameInProgress: boolean = false;
-    private checkGameStatusInterval: NodeJS.Timeout;
+    private checkGameStatusInterval: any;
 
     constructor(
         private logger: LoggerService,

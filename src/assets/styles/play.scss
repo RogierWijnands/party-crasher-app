@@ -13,6 +13,14 @@
 }
 
 /* Confetti */
+.confetti-wrapper {
+  position: fixed;
+  height: calc(100% + 100px);
+  width: 100%;
+  left: 0;
+  top: -50px;
+  overflow: hidden;
+}
 [class|="confetti"] {
   position: absolute;
 }

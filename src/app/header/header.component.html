@@ -8,7 +8,7 @@
                 <ion-button color="secondary" (click)="closeModal()">Close</ion-button>
             </ng-container>
             <ng-template #headerMenu>
-                <ion-button class="header-menu-link" color="secondary">
+                <ion-button class="header-menu-link" color="secondary" (click)="showPopoverMenu($event)">
                     <ion-icon name="ellipsis-vertical-outline" class="header-menu-link-icon"></ion-icon>
                 </ion-button>
             </ng-template>
