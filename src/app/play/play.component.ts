@@ -37,7 +37,7 @@ export class PlayComponent {
   public async quitParty(game: Game) {
     const alert = await this.alertController.create({
       header: 'Confirm',
-      message: moment(game.startDateTime).isSameOrAfter(moment()) 
+      message: moment(game.startDateTime).isAfter(moment()) 
       ? `Are you sure you want to cancel <strong>${game.title}</strong>? It hasn't even started yet...`
       : `Are you sure you want to quit <strong>${game.title}</strong>? It's still early...`,
       buttons: [

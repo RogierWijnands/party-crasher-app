@@ -13,8 +13,8 @@
           <ion-card-title>{{ game.title }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <span *ngIf="moment(game.startDateTime).isSameOrAfter(moment())" class="spacer-bottom-xl display-block">Party "{{ game.title }}" is coming up. Stay alert, I'm about to crash your party...😉</span>
-          <span *ngIf="moment(game.startDateTime).isBefore(moment())" class="spacer-bottom-xl display-block">Party "{{ game.title }}" is in progress. Stay alert, I might crash your party at any moment now...😉</span>
+          <span *ngIf="moment(game.startDateTime).isAfter(moment())" class="spacer-bottom-xl display-block">Party "{{ game.title }}" is coming up. Stay alert, I'm about to crash your party...😉</span>
+          <span *ngIf="moment(game.startDateTime).isSameOrBefore(moment())" class="spacer-bottom-xl display-block">Party "{{ game.title }}" is in progress. Stay alert, I might crash your party at any moment now...😉</span>
           <ion-button shape="round" color="primary" expand="block" (click)="openModal(game)">Edit party</ion-button>
           <ion-button shape="round" fill="outline" color="primary" expand="block" (click)="quitParty(game)">I'm a party pooper 💩</ion-button>
         </ion-card-content>

@@ -10,11 +10,14 @@ import * as moment from 'moment';
 })
 export class GameService {
     private game: BehaviorSubject<Game|undefined> = new BehaviorSubject(undefined);
+    private isGameInProgress: boolean = false;
+    private checkGameStatusInterval: NodeJS.Timeout;
 
     constructor(
         private logger: LoggerService,
     ) {
         this.initActiveGame();
+        this.checkGameStatus();
     }
 
     public get game$(): Observable<Game> {
@@ -29,14 +32,40 @@ export class GameService {
                 this.quitGame().subscribe();
             } else {
                 this.game.next(activeGame);
+                this.setGameInProgressStatus();
             }
         }
+    }
+
+    private checkGameStatus(): void {
+        this.game$.subscribe(game => {
+            if (this.checkGameStatusInterval) {
+                clearInterval(this.checkGameStatusInterval);
+            }
+            if (game) {
+                this.checkGameStatusInterval = setInterval(() => {
+                    if (moment(game.endDateTime).isBefore(moment())) {
+                        // Quit game if end time is passed
+                        this.quitGame().subscribe();
+                    } else if (!this.isGameInProgress && moment(game.startDateTime).isSameOrBefore(moment())) {
+                        // If game was previously not in progress but now is; push update to game so subscribers can update data based on start or end time compared to current time
+                        this.saveGame(game).subscribe();
+                    }
+                }, 60000);
+            }
+        });
+    }
+
+    private setGameInProgressStatus(): void {
+        const game = this.game.getValue();
+        this.isGameInProgress = (game) ? moment(game.startDateTime).isSameOrBefore(moment()) : false;
     }
 
     public saveGame(game: Game): Observable<void> {
         return new Observable((observer) => {
             localStorage.setItem(LocalStorageName.GAME_IN_PROGRESS, JSON.stringify(game));
             this.game.next(game);
+            this.setGameInProgressStatus();
             observer.next();
         });
     }
@@ -50,6 +79,7 @@ export class GameService {
             }
             localStorage.removeItem(LocalStorageName.GAME_IN_PROGRESS);
             this.game.next(undefined);
+            this.setGameInProgressStatus();
             observer.next();
         });
     }
