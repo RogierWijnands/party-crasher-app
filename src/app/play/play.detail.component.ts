@@ -6,18 +6,23 @@ import { Challenge } from '../shared/models/challenge.model';
 import { FriendsService } from '../shared/services/friends.service';
 import { ChallengeService } from '../shared/services/challenge.service';
 import { GameService } from '../shared/services/game.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'play-detail-component',
   templateUrl: 'play.detail.component.html'
 })
 export class PlayDetailComponent implements OnInit {
+  public readonly moment = moment;
+  public friends: Friend[] = [];
+  public challenges: Challenge[] = [];
+
   public tempGame: Game = new Game();
   @Input('game') set game(_game: Game) {
     this.tempGame = new Game(_game);
+    if (this.tempGame.startDateTime instanceof Date) this.tempGame.startDateTime = this.tempGame.startDateTime.toISOString();
+    if (this.tempGame.endDateTime instanceof Date) this.tempGame.endDateTime = this.tempGame.endDateTime.toISOString();
   }
-  public friends: Friend[] = [];
-  public challenges: Challenge[] = [];
 
   constructor(
       private modalController: ModalController,
@@ -27,15 +32,8 @@ export class PlayDetailComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.friendsService.getAll().subscribe(friends => this.friends = friends);
-
-    this.challengeService.getAll().subscribe(challenges => {
-      (this.challenges = challenges).forEach(challenge => {
-        if (!this.tempGame.challenges) this.tempGame.challenges = [];
-        // Select all by default
-        this.tempGame.challenges.push(challenge);
-      });
-    });
+    this.initPlayers();
+    this.initChallenges();
   }
 
   public closeModal(): void {
@@ -43,6 +41,34 @@ export class PlayDetailComponent implements OnInit {
   }
 
   public save(): void {
-    this.gameService.startGame(this.tempGame).subscribe(() => this.closeModal());
+    this.gameService.saveGame(this.tempGame).subscribe(() => this.closeModal());
+  }
+
+  private initPlayers(): void {
+    this.friendsService.getAll().subscribe(friends => {
+      this.friends = friends;
+      // Link friends to tempNode selected players
+      if (this.tempGame.players && this.tempGame.players.length) {
+        this.tempGame.players = this.tempGame.players
+        .filter(tempGamePlayer => friends.some(_friend => _friend.id === tempGamePlayer.id))
+        .map(tempGamePlayer => friends.find(_friend => _friend.id === tempGamePlayer.id))
+      }
+    });
+  }
+
+  private initChallenges(): void {
+    this.challengeService.getAll().subscribe(challenges => {
+      this.challenges = challenges
+      // Link challenges to tempNode selected challenges
+      if (this.tempGame.challenges && this.tempGame.challenges.length) {
+        this.tempGame.challenges = this.tempGame.challenges
+        .filter(tempGameChallenge => challenges.some(_challenge => _challenge.id === tempGameChallenge.id))
+        .map(tempGameChallenge => challenges.find(_challenge => _challenge.id === tempGameChallenge.id))
+      }
+      // Select all by default if none were selected previously
+      if (!this.tempGame.challenges || !this.tempGame.challenges.length) {
+        this.tempGame.challenges = [...this.challenges];
+      }
+    });
   }
 }

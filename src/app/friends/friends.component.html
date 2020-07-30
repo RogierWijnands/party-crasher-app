@@ -4,7 +4,7 @@
   <header-condense-inactive-component [title]="'Friends'"></header-condense-inactive-component>
   <ion-list *ngIf="friends && friends.length; else noItems" class="sliding-list">
     <ion-item-sliding *ngFor="let friend of friends" color="primary">
-      <ion-item color="primary" (click)="openModal(friend)">
+      <ion-item color="primary" (click)="openModal(friend)" detail="true">
         <ion-label>{{ friend.getFullName() }}</ion-label>
       </ion-item>
       <ion-item-options side="end">

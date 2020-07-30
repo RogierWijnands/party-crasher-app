@@ -13,6 +13,10 @@ ion-content {
   font-style: italic;
 }
 
+.display-block {
+  display: block;
+}
+
 @each $direction in $directions {
   $spacer: 0;
   @each $size in $sizes {

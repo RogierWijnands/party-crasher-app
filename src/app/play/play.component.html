@@ -5,17 +5,25 @@
   <div class="content-inner">
     <span *ngFor="let confetti of [].constructor(150); let i = index" class="confetti-{{i}}"></span>
 
-    <ng-container *ngIf="(gameService.game$ | async) as game">
-      <ng-container *ngIf="!game">
-        <header-condense-inactive-component [title]="''"></header-condense-inactive-component>
-        <img src="../../assets/img/logo.png" alt="Party Crasher logo" class="logo">
-        <ion-button color="secondary" shape="round" class="play-button button-bottom-center" (click)="openModal()">Start a party</ion-button>
-      </ng-container>
-      <ng-container *ngIf="game">
-        <header-condense-inactive-component [title]="game.title"></header-condense-inactive-component>
-        Game in progress!
-        {{ game | json }}
-      </ng-container>
+    <ng-container *ngIf="(gameService.game$ | async) as game; else noGame">
+      <header-condense-inactive-component [title]="(moment(game.startDateTime).isAfter(moment())) ? 'Coming up...' : 'In progress...'"></header-condense-inactive-component>
+      <ion-card color="secondary">
+        <ion-card-header>
+          <ion-card-subtitle>{{ game.startDateTime | date:'dd/MM, HH:mm' }} - {{ game.endDateTime | date:'dd/MM, HH:mm' }}</ion-card-subtitle>
+          <ion-card-title>{{ game.title }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <span *ngIf="moment(game.startDateTime).isSameOrAfter(moment())" class="spacer-bottom-xl display-block">Party "{{ game.title }}" is coming up. Stay alert, I'm about to crash your party...😉</span>
+          <span *ngIf="moment(game.startDateTime).isBefore(moment())" class="spacer-bottom-xl display-block">Party "{{ game.title }}" is in progress. Stay alert, I might crash your party at any moment now...😉</span>
+          <ion-button shape="round" color="primary" expand="block" (click)="openModal(game)">Edit party</ion-button>
+          <ion-button shape="round" fill="outline" color="primary" expand="block" (click)="quitParty(game)">I'm a party pooper 💩</ion-button>
+        </ion-card-content>
+      </ion-card>
     </ng-container>
+    <ng-template #noGame>
+      <header-condense-inactive-component [title]="''"></header-condense-inactive-component>
+      <img src="../../assets/img/logo.png" alt="Party Crasher logo" class="logo">
+      <ion-button color="secondary" shape="round" class="play-button button-bottom-center" (click)="openModal()">Start a party</ion-button>
+    </ng-template>
   </div>
 </ion-content>

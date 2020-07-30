@@ -3,8 +3,8 @@ import { Challenge } from './challenge.model';
 
 export class Game {
     public title: string;
-    public startDateTime: Date;
-    public endDateTime: Date;
+    public startDateTime: Date|string;
+    public endDateTime: Date|string;
     public players: Friend[];
     public challenges: Challenge[];
 
@@ -22,15 +22,19 @@ export class Game {
         }
     }
 
-    public setStartDateTime(startDateTime: Date): void {
+    public setStartDateTime(startDateTime: Date|string): void {
         if (startDateTime instanceof Date) {
             this.startDateTime = startDateTime;
+        } else if (typeof startDateTime === 'string') {
+            this.startDateTime = new Date(startDateTime);
         }
     }
 
-    public setEndDateTime(endDateTime: Date): void {
+    public setEndDateTime(endDateTime: Date|string): void {
         if (endDateTime instanceof Date) {
             this.endDateTime = endDateTime;
+        } else if (typeof endDateTime === 'string') {
+            this.endDateTime = new Date(endDateTime);
         }
     }
 
