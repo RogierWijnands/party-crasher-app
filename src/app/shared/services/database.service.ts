@@ -33,15 +33,17 @@ export class DatabaseService {
             this.dbReady.next(true);
         } else {
             // Cordova (native db)
-            this.sqlite.create({
-                name: this.DB_NAME,
-                location: 'default'
-            })
-                .then((db: SQLiteObject) => {      
-                    this.database = db;
-                    this.dbReady.next(true);
+            this.platform.ready().then(() => {
+                this.sqlite.create({
+                    name: this.DB_NAME,
+                    location: 'default'
                 })
-                .catch(e => this.logger.error(e));
+                    .then((db: SQLiteObject) => {      
+                        this.database = db;
+                        this.dbReady.next(true);
+                    })
+                    .catch(e => this.logger.error(e));
+            });
         }
     }
 

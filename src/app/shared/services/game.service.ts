@@ -6,6 +6,7 @@ import { GameOptions } from '../interfaces';
 import { LoggerService } from './log.service';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import * as moment from 'moment';
+import { Platform } from '@ionic/angular';
 
 @Injectable({
     providedIn: 'root'
@@ -24,6 +25,7 @@ export class GameService {
     }
 
     constructor(
+        private platform: Platform,
         private logger: LoggerService,
         private localNotifications: LocalNotifications,
     ) {
@@ -98,29 +100,33 @@ export class GameService {
             localStorage.removeItem(LocalStorageName.GAME_IN_PROGRESS);
             this.game.next(undefined);
             this.setGameInProgressStatus();
-            this.localNotifications.cancelAll();
+            this.platform.ready().then(() => {
+                this.localNotifications.cancelAll();
+            });
             observer.next();
         });
     }
 
     private scheduleNotifications(game: Game): Observable<void> {
         return new Observable((observer) => {
-            const minChallengesPerGame = this.gameOptions.minChallengesPerGame;
-            const maxChallengesPerGame = Math.min(this.gameOptions.maxChallengesPerGame, game.challenges.length);
-            const amountOfChallenges = Math.floor(Math.random() * maxChallengesPerGame) + minChallengesPerGame;
-            const duration = moment.duration(moment(game.startDateTime).diff(moment(game.endDateTime))).asMilliseconds();
-            const increment = duration / amountOfChallenges;
-            let triggerAt = moment(game.startDateTime).add(increment/2, 'milliseconds');
+            this.platform.ready().then(() => {
+                const minChallengesPerGame = this.gameOptions.minChallengesPerGame;
+                const maxChallengesPerGame = Math.min(this.gameOptions.maxChallengesPerGame, game.challenges.length);
+                const amountOfChallenges = Math.floor(Math.random() * maxChallengesPerGame) + minChallengesPerGame;
+                const duration = moment.duration(moment(game.startDateTime).diff(moment(game.endDateTime))).asMilliseconds();
+                const increment = duration / amountOfChallenges;
+                let triggerAt = moment(game.startDateTime).add(increment/2, 'milliseconds');
 
-            Array(amountOfChallenges).fill('').forEach(() => {
-                this.localNotifications.schedule({
-                    text: this.gameOptions.notificationOptions.notificationMessage,
-                    trigger: {at: triggerAt.toDate()},
-                 });
-                 triggerAt = triggerAt.add(increment, 'milliseconds');
+                Array(amountOfChallenges).fill('').forEach(() => {
+                    this.localNotifications.schedule({
+                        text: this.gameOptions.notificationOptions.notificationMessage,
+                        trigger: {at: triggerAt.toDate()},
+                    });
+                    triggerAt = triggerAt.add(increment, 'milliseconds');
+                });
+
+                observer.next();
             });
-
-            observer.next();
         });
     }
 }
