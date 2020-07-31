@@ -14,7 +14,7 @@ ion-content {
 }
 
 .display-block {
-  display: block;
+  display: block !important;
 }
 
 @each $direction in $directions {
@@ -22,10 +22,10 @@ ion-content {
   @each $size in $sizes {
     $spacer: $spacer + 5;
     .spacer-#{$direction}-#{$size} {
-      margin-#{$direction}: #{$spacer}px;
+      margin-#{$direction}: #{$spacer}px !important;
     }
     .padding-#{$direction}-#{$size} {
-      padding-#{$direction}: #{$spacer}px;
+      padding-#{$direction}: #{$spacer}px !important;
     }
   }
 }

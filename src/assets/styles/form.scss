@@ -1,6 +1,4 @@
-.button-bottom-center {
-    position: absolute;
-    bottom: 40px;
+.button-center {
     left: 0;
     right: 0;
     margin: 0 auto;
@@ -8,4 +6,9 @@
     display: block;
     font-weight: 900;
     z-index: 1;
+}
+
+.button-bottom {
+    position: absolute;
+    bottom: 40px;
 }
