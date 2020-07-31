@@ -10,3 +10,7 @@ plugins/
 # Builds
 dist/
 www/
+
+# Platforms
+ios/
+android/
