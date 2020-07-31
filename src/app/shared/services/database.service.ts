@@ -78,7 +78,11 @@ export class DatabaseService {
             this.initDatabaseTable(tableName).subscribe(() => {
                 this.database.executeSql(`SELECT * FROM ${tableName}`, [])
                     .then((res) => {
-                        observer.next(res);
+                        const data = [];
+                        for (let i = 0; i < res.rows.length; i++) {
+                            data.push(res.rows.item(i));
+                        }
+                        observer.next(data);
                     })
                     .catch(e => {
                         this.logger.error(e);

@@ -110,7 +110,7 @@ export class GameService {
     private scheduleNotifications(game: Game): Observable<void> {
         return new Observable((observer) => {
             this.platform.ready().then(() => {
-                const minChallengesPerGame = this.gameOptions.minChallengesPerGame;
+                const minChallengesPerGame = Math.min(this.gameOptions.minChallengesPerGame, game.challenges.length);
                 const maxChallengesPerGame = Math.min(this.gameOptions.maxChallengesPerGame, game.challenges.length);
                 const amountOfChallenges = Math.floor(Math.random() * maxChallengesPerGame) + minChallengesPerGame;
                 const duration = moment.duration(moment(game.startDateTime).diff(moment(game.endDateTime))).asMilliseconds();

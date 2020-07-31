@@ -37,7 +37,7 @@ export class FriendsService {
     public getAll(): Observable<Friend[]> {
         return new Observable((observer) => {
             this.databaseService.getRows(DatabaseTableName.FRIENDS).subscribe((res: any) => {
-                observer.next(Array.from(res.rows).map(friend => new Friend(friend)).sort((a, b) => a.firstName.localeCompare(b.firstName)));
+                observer.next(Array.from(res).map(friend => new Friend(friend)).sort((a, b) => a.firstName.localeCompare(b.firstName)));
             });
         });
     }

@@ -37,7 +37,7 @@ export class ChallengeService {
     public getAll(): Observable<Challenge[]> {
         return new Observable((observer) => {
             this.databaseService.getRows(DatabaseTableName.CHALLENGES).subscribe((res: any) => {
-                observer.next(Array.from(res.rows).map(challenge => new Challenge(challenge)).sort((a, b) => a.title.localeCompare(b.title)));
+                observer.next(Array.from(res).map(challenge => new Challenge(challenge)).sort((a, b) => a.title.localeCompare(b.title)));
             });
         });
     }
