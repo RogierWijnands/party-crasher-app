@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalStorageName } from '../enum';
 import { Game } from '../models/game.model';
+import { GameOptions } from '../interfaces';
 import { LoggerService } from './log.service';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import * as moment from 'moment';
 
 @Injectable({
@@ -12,9 +14,18 @@ export class GameService {
     private game: BehaviorSubject<Game|undefined> = new BehaviorSubject(undefined);
     private isGameInProgress: boolean = false;
     private checkGameStatusInterval: any;
+    private gameOptions: GameOptions = {
+        minChallengesPerGame: 5,
+        maxChallengesPerGame: 20,
+        notificationOptions: {
+            notificationMessage: 'Oh oh, your party is being crashed! A new challenge awaits...😰',
+            notificationSound: '',
+        },
+    }
 
     constructor(
         private logger: LoggerService,
+        private localNotifications: LocalNotifications,
     ) {
         this.initActiveGame();
         this.checkGameStatus();
@@ -63,10 +74,17 @@ export class GameService {
 
     public saveGame(game: Game): Observable<void> {
         return new Observable((observer) => {
-            localStorage.setItem(LocalStorageName.GAME_IN_PROGRESS, JSON.stringify(game));
-            this.game.next(game);
-            this.setGameInProgressStatus();
-            observer.next();
+            const _saveGame = () => {
+                localStorage.setItem(LocalStorageName.GAME_IN_PROGRESS, JSON.stringify(game));
+                this.game.next(game);
+                this.setGameInProgressStatus();
+                observer.next();
+            }
+            if (!this.isGameInProgress) {
+                this.scheduleNotifications(game).subscribe(() => _saveGame());
+            } else {
+                _saveGame();
+            }
         });
     }
 
@@ -80,6 +98,28 @@ export class GameService {
             localStorage.removeItem(LocalStorageName.GAME_IN_PROGRESS);
             this.game.next(undefined);
             this.setGameInProgressStatus();
+            this.localNotifications.cancelAll();
+            observer.next();
+        });
+    }
+
+    private scheduleNotifications(game: Game): Observable<void> {
+        return new Observable((observer) => {
+            const minChallengesPerGame = this.gameOptions.minChallengesPerGame;
+            const maxChallengesPerGame = Math.min(this.gameOptions.maxChallengesPerGame, game.challenges.length);
+            const amountOfChallenges = Math.floor(Math.random() * maxChallengesPerGame) + minChallengesPerGame;
+            const duration = moment.duration(moment(game.startDateTime).diff(moment(game.endDateTime))).asMilliseconds();
+            const increment = duration / amountOfChallenges;
+            let triggerAt = moment(game.startDateTime).add(increment/2, 'milliseconds');
+
+            Array(amountOfChallenges).fill('').forEach(() => {
+                this.localNotifications.schedule({
+                    text: this.gameOptions.notificationOptions.notificationMessage,
+                    trigger: {at: triggerAt.toDate()},
+                 });
+                 triggerAt.add(increment, 'milliseconds');
+            });
+
             observer.next();
         });
     }

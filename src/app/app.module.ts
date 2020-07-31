@@ -12,6 +12,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SQLite } from '@ionic-native/sqlite/ngx';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +27,7 @@ import { SQLite } from '@ionic-native/sqlite/ngx';
     ToastrModule.forRoot(),
   ],
   providers: [
+    LocalNotifications,
     StatusBar,
     SplashScreen,
     SQLite,
