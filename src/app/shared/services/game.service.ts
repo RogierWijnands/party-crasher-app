@@ -117,7 +117,7 @@ export class GameService {
                     text: this.gameOptions.notificationOptions.notificationMessage,
                     trigger: {at: triggerAt.toDate()},
                  });
-                 triggerAt.add(increment, 'milliseconds');
+                 triggerAt = triggerAt.add(increment, 'milliseconds');
             });
 
             observer.next();
