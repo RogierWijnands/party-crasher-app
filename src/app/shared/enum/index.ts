@@ -19,3 +19,8 @@ export enum LocalStorageName {
 export enum NotificationType {
     CHALLENGE = 'challenge',
 }
+
+export enum ProgressItemStatus {
+    DONE = 'done',
+    TO_DO = 'to_do',
+}

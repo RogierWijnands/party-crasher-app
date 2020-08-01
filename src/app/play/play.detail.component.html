@@ -39,8 +39,8 @@
                     (
                         !(gameService.game$ | async) &&
                         (
-                            (!moment(tempGame.startDateTime).isSameOrAfter(moment())) ||
-                            (moment(tempGame.startDateTime).isAfter(moment(tempGame.endDateTime)))   
+                            (!moment(tempGame.startDateTime).startOf('minute').isSameOrAfter(moment(), 'minutes')) ||
+                            (moment(tempGame.startDateTime).isAfter(moment(tempGame.endDateTime), 'minutes'))   
                         )
                     )
                     ">

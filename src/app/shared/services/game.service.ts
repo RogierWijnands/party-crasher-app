@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { LocalStorageName, NotificationType } from '../enum';
+import { LocalStorageName, NotificationType, ProgressItemStatus, ChallengeMode } from '../enum';
 import { Game } from '../models/game.model';
 import { GameOptions, NotificationData } from '../interfaces';
-import { LoggerService } from './log.service';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { Platform, ModalController } from '@ionic/angular';
+import { ProgressItem } from '../models/progress-item.model';
+import { ModalOptions } from '@ionic/core';
+import { ChallengeDetailComponent } from 'src/app/challenges/challenge.detail.component';
 import * as moment from 'moment';
-import { Platform } from '@ionic/angular';
 
 @Injectable({
     providedIn: 'root'
@@ -26,8 +28,8 @@ export class GameService {
 
     constructor(
         private platform: Platform,
-        private logger: LoggerService,
         private localNotifications: LocalNotifications,
+        private modalController: ModalController,
     ) {
         this.initActiveGame();
         this.checkGameStatus();
@@ -41,7 +43,7 @@ export class GameService {
         let activeGame: Game|string = localStorage.getItem(LocalStorageName.GAME_IN_PROGRESS);
         if (activeGame) {
             activeGame = new Game(JSON.parse(activeGame));
-            if (moment(activeGame.endDateTime).isBefore(moment())) {
+            if (moment(activeGame.endDateTime).isBefore(moment(), 'seconds')) {
                 this.quitGame().subscribe();
             } else {
                 this.game.next(activeGame);
@@ -57,38 +59,45 @@ export class GameService {
             }
             if (game) {
                 this.checkGameStatusInterval = setInterval(() => {
-                    if (moment(game.endDateTime).isBefore(moment())) {
+                    if (moment(game.endDateTime).isBefore(moment(), 'seconds')) {
                         // Quit game if end time is passed
                         this.quitGame().subscribe();
-                    } else if (!this.isGameInProgress && moment(game.startDateTime).isSameOrBefore(moment())) {
+                    } else if (!this.isGameInProgress && moment(game.startDateTime).isSameOrBefore(moment(), 'seconds')) {
                         // If game was previously not in progress but now is; push update to game so subscribers can update data based on start or end time compared to current time
                         this.saveGame(game).subscribe();
                     }
-                }, 30000);
+                }, 1000);
             }
         });
     }
 
     private setGameInProgressStatus(): void {
         const game = this.game.getValue();
-        this.isGameInProgress = (game) ? moment(game.startDateTime).isSameOrBefore(moment()) : false;
+        this.isGameInProgress = (game) ? moment(game.startDateTime).isSameOrBefore(moment(), 'seconds') : false;
     }
 
     public saveGame(game: Game): Observable<void> {
         return new Observable((observer) => {
-            const _saveGame = () => {
+            const _saveGame = (_game: Game) => {
                 localStorage.setItem(LocalStorageName.GAME_IN_PROGRESS, JSON.stringify(game));
                 this.game.next(game);
                 this.setGameInProgressStatus();
                 observer.next();
             }
             if (!this.isGameInProgress) {
-                if (moment(game.startDateTime).isBefore(moment())) {
-                    game.startDateTime = new Date();
+                // Parse start and end date times before scheduling game
+                game.startDateTime = moment(game.startDateTime).startOf('minute').toDate();
+                game.endDateTime = moment(game.endDateTime).endOf('minute').toDate();
+
+                // If set start date is before now, force start date to now
+                if (moment(game.startDateTime).isBefore(moment(), 'minutes')) {
+                    game.startDateTime = moment().startOf('minute').toDate();
                 }
-                this.scheduleNotifications(game).subscribe(() => _saveGame());
+
+                // Schedule notifications
+                this.scheduleNotifications(game).subscribe((_game) => _saveGame(_game));
             } else {
-                _saveGame();
+                _saveGame(game);
             }
         });
     }
@@ -96,7 +105,6 @@ export class GameService {
     public quitGame(): Observable<void> {
         return new Observable((observer) => {
             if (!this.game.getValue()) {
-                this.logger.error('No game in progress!');
                 observer.next();
                 return;
             }
@@ -110,16 +118,18 @@ export class GameService {
         });
     }
 
-    private scheduleNotifications(game: Game): Observable<void> {
+    private scheduleNotifications(game: Game): Observable<Game> {
         return new Observable((observer) => {
             this.platform.ready().then(() => {
+                // Calculate notifications schedule
                 const minChallengesPerGame = Math.min(this.gameOptions.minChallengesPerGame, game.challenges.length);
                 const maxChallengesPerGame = Math.min(this.gameOptions.maxChallengesPerGame, game.challenges.length);
                 const amountOfChallenges = Math.floor(Math.random() * maxChallengesPerGame) + minChallengesPerGame;
-                const duration = moment.duration(moment(game.startDateTime).diff(moment(game.endDateTime))).asMilliseconds();
+                const duration = moment.duration(moment(game.endDateTime).diff(moment(game.startDateTime))).asSeconds();
                 const increment = duration / amountOfChallenges;
-                let triggerAt = moment(game.startDateTime).add(increment/2, 'milliseconds');
+                let triggerAt = moment(game.startDateTime).add(increment/2, 'seconds');
 
+                // Set notifications for each challenge
                 Array(amountOfChallenges).fill('').forEach(() => {
                     this.localNotifications.schedule({
                         text: this.gameOptions.notificationOptions.notificationMessage,
@@ -127,16 +137,60 @@ export class GameService {
                         foreground: true,
                         vibrate: true,
                         badge: 1,
+                        priority: 2,
+                        wakeup: true,
                         sound: this.platform.is('ios') ? 'res://public/assets/sound/alarm.caf' : 'res://public/assets/sound/alarm.mp3',
                         data: <NotificationData> {
                             notificationType: NotificationType.CHALLENGE,
                         }
                     });
-                    triggerAt = triggerAt.add(increment, 'milliseconds');
+
+                    // Set game progress items for each notification created
+                    if (!game.progress) {
+                        game.progress = [];
+                    }
+                    game.progress.push(new ProgressItem({ status: ProgressItemStatus.TO_DO, dateTime: triggerAt.toDate() }))
+
+                    // Increment the trigger time for the next notification
+                    triggerAt = triggerAt.add(increment, 'seconds');
                 });
 
-                observer.next();
+                observer.next(game);
             });
         });
     }
+
+    public checkForActiveChallenge(): void {
+        const game = this.game.getValue();
+        if (!this.isGameInProgress || !game) {
+            return;
+        }
+
+        // Get date times of each set challenge
+        // Check for latest with date time that has passed with a to do status
+        // If found, activate challenge
+        const todoChallenges: ProgressItem[] = [];
+        game.progress.forEach(progressItem => {
+            if (moment(progressItem.dateTime).isSameOrBefore(moment(), 'seconds') && progressItem.status === ProgressItemStatus.TO_DO) {
+                todoChallenges.push(progressItem);
+            }
+        });
+        if (todoChallenges.length > 0) {
+            this.openChallengeModal(game, todoChallenges.pop())
+        }
+    }
+
+    private async openChallengeModal(game: Game, progressItem: ProgressItem) {
+        const options: ModalOptions = {
+          component: ChallengeDetailComponent,
+          swipeToClose: true,
+          componentProps: {
+            game,
+            activeProgressItem: progressItem,
+            mode: ChallengeMode.PLAY,
+          }
+        };
+        const modal = await this.modalController.create(options);
+        await modal.present();
+      }
 }

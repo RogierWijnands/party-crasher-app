@@ -1,5 +1,6 @@
 import { Friend } from './friend.model';
 import { Challenge } from './challenge.model';
+import { ProgressItem } from './progress-item.model';
 
 export class Game {
     public title: string;
@@ -7,6 +8,7 @@ export class Game {
     public endDateTime: Date|string;
     public players: Friend[];
     public challenges: Challenge[];
+    public progress: ProgressItem[];
 
     constructor(game: {[key: string]: any} = {}) {
         this.setTitle(game.title);
@@ -14,6 +16,7 @@ export class Game {
         this.setEndDateTime(game.endDateTime);
         this.setPlayers(game.players);
         this.setChallenges(game.challenges);
+        this.setProgress(game.progress);
     }
 
     public setTitle(title: string): void {
@@ -47,6 +50,12 @@ export class Game {
     public setChallenges(challenges: Challenge[]): void {
         if (Array.isArray(challenges)) {
             this.challenges = challenges.map(challenge => new Challenge(challenge));
+        }
+    }
+
+    public setProgress(progress: ProgressItem[]): void {
+        if (Array.isArray(progress)) {
+            this.progress = progress.map(progress => new ProgressItem(progress));
         }
     }
 }
