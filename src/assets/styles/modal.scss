@@ -3,33 +3,35 @@ ion-modal {
     @media (max-width: 767px) {
         .modal-wrapper {
             --height: calc(100% - 50px);
-            --overflow: visible;
             --background: transparent;
+            --border-radius: 20px 20px 0 0;
             margin-bottom: -50px;
 
             // Swipe close indicator
             &:before {
                 content: '';
                 width: 60px;
-                height: 6px;
+                height: 4px;
                 margin: 0 auto;
                 position: absolute;
                 left: 0;
                 right: 0;
-                top: -25px;
-                background-color: rgba(var(--ion-color-light-rgb), 0.5);
+                top: 8px;
+                background-color: rgba(var(--ion-color-light-rgb), 0.2);
                 border-radius: 3px;
-            }
-
-            .ion-page {
-                border-radius: 20px !important;
+                z-index: 1;
             }
         }
     
         .modal-shadow {
             --height: calc(100% - 100px);
             margin-bottom: -100px;
-            background: var(--ion-color-primary) !important;
-        }   
+        }
+
+        ion-header {
+           & > ion-toolbar {
+               padding-top: 10px !important;
+           }
+        }
     }
 }
