@@ -13,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SQLite } from '@ionic-native/sqlite/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { Badge } from '@ionic-native/badge/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,6 +28,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
     ToastrModule.forRoot(),
   ],
   providers: [
+    Badge,
     LocalNotifications,
     StatusBar,
     SplashScreen,
