@@ -30,11 +30,14 @@ export class AppComponent {
       this.statusBar.overlaysWebView(true);
       this.statusBar.styleLightContent();
       this.splashScreen.hide();
+      
+      // Clear badges on app open
+      this.badge.clear();
+      this.platform.resume.subscribe(() => this.badge.clear());
 
       // Handle open challenge on notification click
       this.localNotifications.on('click').subscribe(notification => {
         alert('test');
-        this.badge.clear();
         if (notification.data && notification.data.notificationType === NotificationType.CHALLENGE) {
           this.openChallengeModal();
         }
