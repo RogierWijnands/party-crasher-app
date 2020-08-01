@@ -4,17 +4,17 @@
     <form #addFriendForm="ngForm" (submit)="save();">
         <ion-item color="primary">
             <ion-label position="floating">First name</ion-label>
-            <ion-input name="firstName" [(ngModel)]="tempFriend.firstName" required></ion-input>
+            <ion-input name="firstName" [(ngModel)]="tempFriend.firstName" autocapitalize="on" required></ion-input>
         </ion-item>
 
         <ion-item color="primary">
             <ion-label position="floating">Middle name</ion-label>
-            <ion-input name="middleName" [(ngModel)]="tempFriend.middleName"></ion-input>
+            <ion-input name="middleName" [(ngModel)]="tempFriend.middleName" autocapitalize="on"></ion-input>
         </ion-item>
     
         <ion-item color="primary">
             <ion-label position="floating">Last name</ion-label>
-            <ion-input name="lastName" [(ngModel)]="tempFriend.lastName"></ion-input>
+            <ion-input name="lastName" [(ngModel)]="tempFriend.lastName" autocapitalize="on"></ion-input>
         </ion-item>
 
         <ion-button color="secondary" shape="round" class="button-center spacer-top-xxl" type="submit" [disabled]="addFriendForm.invalid">Save friend</ion-button>

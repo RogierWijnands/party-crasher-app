@@ -64,7 +64,7 @@ export class GameService {
                         // If game was previously not in progress but now is; push update to game so subscribers can update data based on start or end time compared to current time
                         this.saveGame(game).subscribe();
                     }
-                }, 60000);
+                }, 30000);
             }
         });
     }
@@ -83,6 +83,9 @@ export class GameService {
                 observer.next();
             }
             if (!this.isGameInProgress) {
+                if (moment(game.startDateTime).isBefore(moment())) {
+                    game.startDateTime = new Date();
+                }
                 this.scheduleNotifications(game).subscribe(() => _saveGame());
             } else {
                 _saveGame();
@@ -121,7 +124,9 @@ export class GameService {
                     this.localNotifications.schedule({
                         text: this.gameOptions.notificationOptions.notificationMessage,
                         trigger: {at: triggerAt.toDate()},
+                        foreground: true,
                         data: <NotificationData> {
+                            game,
                             notificationType: NotificationType.CHALLENGE,
                         }
                     });

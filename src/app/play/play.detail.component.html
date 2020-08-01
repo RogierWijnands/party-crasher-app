@@ -4,7 +4,7 @@
     <form #startPartyForm="ngForm" (submit)="save()">
         <ion-item color="primary">
             <ion-label position="floating">Title</ion-label>
-            <ion-input name="title" [(ngModel)]="tempGame.title" required></ion-input>
+            <ion-input name="title" [(ngModel)]="tempGame.title" autocapitalize="on" required></ion-input>
         </ion-item>
         <ion-item color="primary">
             <ion-label position="floating">Start time</ion-label>

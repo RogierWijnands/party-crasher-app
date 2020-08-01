@@ -1,3 +1,12 @@
+export enum ChallengeContent {
+    PLAYER_REF = '[player]',
+}
+
+export enum ChallengeMode {
+    EDIT = 'edit',
+    PLAY = 'play',
+}
+
 export enum DatabaseTableName {
     FRIENDS = 'friends',
     CHALLENGES = 'challenges',

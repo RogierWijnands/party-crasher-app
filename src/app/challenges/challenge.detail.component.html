@@ -1,17 +1,30 @@
 <header-component [title]="(tempChallenge && tempChallenge.id) ? tempChallenge.title : 'Add challenge'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
 
-<ion-content [fullscreen]="true">
-    <form #addChallengeForm="ngForm" (submit)="save()">
-        <ion-item color="primary">
-            <ion-label position="floating">Title</ion-label>
-            <ion-input name="title" [(ngModel)]="tempChallenge.title" required></ion-input>
-        </ion-item>
-        <ion-item color="primary">
-            <small class="spacer-top-md italic">Type [player] in the description to insert a player reference in a challenge. For example: "[player] has to finish his drink!"</small>
-            <ion-label position="floating">Description</ion-label>
-            <ion-textarea autoGrow="true" name="description" [(ngModel)]="tempChallenge.description" required></ion-textarea>
-        </ion-item>
-
-        <ion-button color="secondary" shape="round" class="button-center spacer-top-xxl" type="submit" [disabled]="addChallengeForm.invalid">Save challenge</ion-button>
-    </form>
+<ion-content color="primary" [fullscreen]="true">
+    <ng-container *ngIf="mode === ChallengeMode.EDIT">
+        <form #addChallengeForm="ngForm" (submit)="save()">
+            <ion-item color="primary">
+                <ion-label position="floating">Title</ion-label>
+                <ion-input name="title" [(ngModel)]="tempChallenge.title" autocapitalize="on" required></ion-input>
+            </ion-item>
+            <ion-item color="primary">
+                <small class="spacer-top-md italic">Type {{ChallengeContent.PLAYER_REF}} in the description to insert a player reference in a challenge. For example: "{{ChallengeContent.PLAYER_REF}} has to finish his drink!"</small>
+                <ion-label position="floating">Description</ion-label>
+                <ion-textarea autoGrow="true" name="description" [(ngModel)]="tempChallenge.description" autocapitalize="on" required></ion-textarea>
+            </ion-item>
+    
+            <ion-button color="secondary" shape="round" class="button-center spacer-top-xxl" type="submit" [disabled]="addChallengeForm.invalid">Save challenge</ion-button>
+        </form>
+    </ng-container>
+    <ng-container *ngIf="mode === ChallengeMode.PLAY">
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <p>
+                        {{ tempChallenge.description }}
+                    </p>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ng-container>
 </ion-content>
