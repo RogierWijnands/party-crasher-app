@@ -1,7 +1,7 @@
 <header-component [title]="(tempGame.title) ? tempGame.title : 'Start party'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
 
 <ion-content [fullscreen]="true">
-    <form #startPartyForm="ngForm" (submit)="save()">
+    <form #startPartyForm="ngForm">
         <ion-item color="primary">
             <ion-label position="floating">Title</ion-label>
             <ion-input name="title" [(ngModel)]="tempGame.title" autocapitalize="on" required></ion-input>
@@ -29,7 +29,7 @@
         <ion-button color="secondary" 
                     shape="round" 
                     class="button-center spacer-top-xxl" 
-                    type="submit" 
+                    (click)="save()"
                     [disabled]="
                     startPartyForm.invalid || 
                     !tempGame.challenges || 

@@ -60,13 +60,13 @@ export class PlayDetailComponent implements OnInit {
     this.challengeService.getAll().subscribe(challenges => {
       this.challenges = challenges
       // Link challenges to tempNode selected challenges
-      if (this.tempGame.challenges && this.tempGame.challenges.length) {
+      if (this.tempGame.challenges) {
         this.tempGame.challenges = this.tempGame.challenges
         .filter(tempGameChallenge => challenges.some(_challenge => _challenge.id === tempGameChallenge.id))
         .map(tempGameChallenge => challenges.find(_challenge => _challenge.id === tempGameChallenge.id))
       }
       // Select all by default if none were selected previously
-      if (!this.tempGame.challenges || !this.tempGame.challenges.length) {
+      if (!this.tempGame.challenges) {
         this.tempGame.challenges = [...this.challenges];
       }
     });

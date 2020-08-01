@@ -14,7 +14,6 @@ export class ChallengeDetailComponent implements OnInit {
   public readonly ChallengeContent = ChallengeContent;
   public readonly ChallengeMode = ChallengeMode;
 
-  @Input() public game: Game;
   @Input() public mode: ChallengeMode = ChallengeMode.EDIT;
 
   public tempChallenge: Challenge = new Challenge();
@@ -45,43 +44,44 @@ export class ChallengeDetailComponent implements OnInit {
   }
 
   private playChallenge(): void {
-    if (
-      this.mode !== ChallengeMode.PLAY || 
-      !(this.game instanceof Game) || 
-      !this.game.challenges || 
-      !this.game.challenges.length ||
-      !this.game.players ||
-      !this.game.players.length
-      ) {
-      this.closeModal();
-      return;
-    }
-
-    // Pick random challenge
-    this.tempChallenge = new Challenge(this.game.challenges[Math.floor(Math.random() * this.game.challenges.length)]);
-    // Remove randomly picked challenge from game
-    this.game.challenges = this.game.challenges.filter(_challenge => _challenge.id !== this.tempChallenge.id);
-
-    // Replace challenge player references with actual players
-    let splitChallengeDesc = this.tempChallenge.description.split(ChallengeContent.PLAYER_REF);
-    let challengeDesc = '';
-    if (splitChallengeDesc.length > 1) {
-      splitChallengeDesc.forEach((descPart, i) => {
-        if (i !== splitChallengeDesc.length - 1) {
-         // Pick first player
-        const pickPlayer = this.game.players.shift();
-        // Move picked player to end of players list
-        this.game.players.push(pickPlayer);
-        // Add player name to challenge description part
-        descPart += pickPlayer.getFullName(); 
-        }
-        challengeDesc += descPart;
-      });
-      this.tempChallenge.description = challengeDesc;
-    }
-
-    // Update game data
-    this.gameService.saveGame(this.game).subscribe();
+    this.gameService.game$.subscribe((game: Game) => {
+      if (
+        this.mode !== ChallengeMode.PLAY || 
+        !(game instanceof Game) || 
+        !game.challenges || 
+        !game.challenges.length ||
+        !game.players ||
+        !game.players.length
+        ) {
+        this.closeModal();
+        return;
+      }
+  
+      // Pick random challenge
+      this.tempChallenge = new Challenge(game.challenges[Math.floor(Math.random() * game.challenges.length)]);
+      // Remove randomly picked challenge from game
+      game.challenges = game.challenges.filter(_challenge => _challenge.id !== this.tempChallenge.id);
+  
+      // Replace challenge player references with actual players
+      let splitChallengeDesc = this.tempChallenge.description.split(ChallengeContent.PLAYER_REF);
+      let challengeDesc = '';
+      if (splitChallengeDesc.length > 1) {
+        splitChallengeDesc.forEach((descPart, i) => {
+          if (i !== splitChallengeDesc.length - 1) {
+           // Pick first player
+          const pickPlayer = game.players.shift();
+          // Move picked player to end of players list
+          game.players.push(pickPlayer);
+          // Add player name to challenge description part
+          descPart += `<strong>${pickPlayer.getFullName()}</strong>`; 
+          }
+          challengeDesc += descPart;
+        });
+        this.tempChallenge.description = challengeDesc;
+      }
+  
+      // Update game data
+      this.gameService.saveGame(game).subscribe();
+    });
   }
-
 }

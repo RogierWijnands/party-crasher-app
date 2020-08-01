@@ -126,7 +126,6 @@ export class GameService {
                         trigger: {at: triggerAt.toDate()},
                         foreground: true,
                         data: <NotificationData> {
-                            game,
                             notificationType: NotificationType.CHALLENGE,
                         }
                     });

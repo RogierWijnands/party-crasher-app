@@ -8,7 +8,6 @@ export interface GameOptions {
 }
 
 export interface NotificationData {
-    game: Game,
     notificationType: NotificationType,
 }
 
