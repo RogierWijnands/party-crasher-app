@@ -125,6 +125,8 @@ export class GameService {
                         text: this.gameOptions.notificationOptions.notificationMessage,
                         trigger: {at: triggerAt.toDate()},
                         foreground: true,
+                        vibrate: true,
+                        sound: this.platform.is('ios') ? 'res://public/assets/sound/alarm.caf' : 'res://public/assets/sound/alarm.mp3',
                         data: <NotificationData> {
                             notificationType: NotificationType.CHALLENGE,
                         }

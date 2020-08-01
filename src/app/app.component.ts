@@ -31,6 +31,7 @@ export class AppComponent {
 
       // Handle open challenge on notification click
       this.localNotifications.on('click').subscribe(notification => {
+        alert('test');
         if (notification.data && notification.data.notificationType === NotificationType.CHALLENGE) {
           this.openChallengeModal();
         }
