@@ -6,6 +6,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { NotificationType, ChallengeMode } from './shared/enum';
 import { ChallengeDetailComponent } from './challenges/challenge.detail.component';
 import { ModalOptions } from '@ionic/core';
+import { Badge } from '@ionic-native/badge/ngx';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ export class AppComponent {
     private statusBar: StatusBar,
     private localNotifications: LocalNotifications,
     private modalController: ModalController,
+    private badge: Badge,
   ) {
     this.initializeApp();
   }
@@ -32,6 +34,7 @@ export class AppComponent {
       // Handle open challenge on notification click
       this.localNotifications.on('click').subscribe(notification => {
         alert('test');
+        this.badge.clear();
         if (notification.data && notification.data.notificationType === NotificationType.CHALLENGE) {
           this.openChallengeModal();
         }

@@ -126,6 +126,7 @@ export class GameService {
                         trigger: {at: triggerAt.toDate()},
                         foreground: true,
                         vibrate: true,
+                        badge: 1,
                         sound: this.platform.is('ios') ? 'res://public/assets/sound/alarm.caf' : 'res://public/assets/sound/alarm.mp3',
                         data: <NotificationData> {
                             notificationType: NotificationType.CHALLENGE,
