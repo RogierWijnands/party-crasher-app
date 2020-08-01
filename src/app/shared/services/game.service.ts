@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { LocalStorageName } from '../enum';
+import { LocalStorageName, NotificationType } from '../enum';
 import { Game } from '../models/game.model';
-import { GameOptions } from '../interfaces';
+import { GameOptions, NotificationData } from '../interfaces';
 import { LoggerService } from './log.service';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import * as moment from 'moment';
@@ -121,6 +121,9 @@ export class GameService {
                     this.localNotifications.schedule({
                         text: this.gameOptions.notificationOptions.notificationMessage,
                         trigger: {at: triggerAt.toDate()},
+                        data: <NotificationData> {
+                            notificationType: NotificationType.CHALLENGE,
+                        }
                     });
                     triggerAt = triggerAt.add(increment, 'milliseconds');
                 });
