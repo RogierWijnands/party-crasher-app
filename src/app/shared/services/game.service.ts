@@ -166,26 +166,28 @@ export class GameService {
 
                 // Set notifications for each challenge
                 Array(amountOfChallenges).fill('').forEach((_amountOfChallenges, challengeIndex) => {
-                    notifications.push({
-                        id: challengeIndex + 1,
-                        text: this.gameOptions.notificationOptions.notificationMessage,
-                        trigger: {at: triggerAt.toDate()},
-                        foreground: true,
-                        vibrate: true,
-                        badge: 1,
-                        priority: 2,
-                        wakeup: true,
-                        sound: this.platform.is('ios') ? 'res://public/assets/sound/alarm.caf' : 'res://public/assets/sound/alarm.mp3',
-                        data: <NotificationData> {
-                            notificationType: NotificationType.CHALLENGE,
-                        }
-                    });
-
-                    // Set game progress items for each notification created
-                    game.progress.push(new ProgressItem({ status: ProgressItemStatus.TO_DO, dateTime: triggerAt.toDate() }))
-
-                    // Increment the trigger time for the next notification
-                    triggerAt = triggerAt.add(increment, 'seconds');
+                    if (!triggerAt.isAfter(moment(game.endDateTime), 'seconds')) {
+                        notifications.push({
+                            id: challengeIndex + 1,
+                            text: this.gameOptions.notificationOptions.notificationMessage,
+                            trigger: {at: triggerAt.toDate()},
+                            foreground: true,
+                            vibrate: true,
+                            badge: 1,
+                            priority: 2,
+                            wakeup: true,
+                            sound: this.platform.is('ios') ? 'res://public/assets/sound/alarm.caf' : 'res://public/assets/sound/alarm.mp3',
+                            data: <NotificationData> {
+                                notificationType: NotificationType.CHALLENGE,
+                            }
+                        });
+    
+                        // Set game progress items for each notification created
+                        game.progress.push(new ProgressItem({ status: ProgressItemStatus.TO_DO, dateTime: triggerAt.toDate() }))
+    
+                        // Increment the trigger time for the next notification
+                        triggerAt = triggerAt.add(increment, 'seconds');
+                    }
                 });
 
                 // First cancel all other notifications
