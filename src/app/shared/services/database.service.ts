@@ -7,6 +7,10 @@ import { DatabaseStructure } from '../../lib/db/db-structure';
 import { Platform } from '@ionic/angular';
 import { browserDBInstance } from 'src/app/lib/db/browser-db-instance';
 import { sql_escape } from 'src/app/lib/db/sql_escape';
+import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
+import { File } from '@ionic-native/file/ngx';
+import * as moment from 'moment';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 @Injectable({
     providedIn: 'root',
@@ -15,11 +19,15 @@ export class DatabaseService {
     private readonly DB_NAME = 'partyCrasherDB';
     private database: SQLiteObject | {[key: string]: any}; // Cordova | browser based
     private dbReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    private exportFileName: string = `party-crasher-export-${moment().format('YYYY-MM-DD')}.json`;
 
     constructor(
         private sqlite: SQLite,
         private logger: LoggerService,
         private platform: Platform,
+        private sqlitePorter: SQLitePorter,
+        private file: File,
+        private socialSharing: SocialSharing,
     ) {
         this.init();
     }
@@ -145,6 +153,55 @@ export class DatabaseService {
                         this.logger.error(e);
                         observer.error();
                     });
+            });
+        });
+    }
+
+    public exportDatabase(): Observable<void> {
+        return new Observable((observer) => {
+            // Wait until database is ready
+            this.getDatabaseReadyState().subscribe((ready: boolean) => {
+                if (!ready) {
+                    return;
+                }
+                this.sqlitePorter.exportDbToJson(this.database).then((json) => {
+                    this.file.createFile(this.file.cacheDirectory, this.exportFileName, true).then(() => {
+                        this.file.writeExistingFile(this.file.cacheDirectory, this.exportFileName, JSON.stringify(json)).then(() => {
+                            this.socialSharing.share(null, null, this.file.cacheDirectory + this.exportFileName, null).then(() => {
+                                observer.next();
+                            }, (err) => {
+                                this.logger.error(err);
+                                observer.error();
+                            });
+                        }, (err) => {
+                            this.logger.error(err);
+                            observer.error();
+                        });
+                    }, (err) => {
+                        this.logger.error(err);
+                        observer.error();
+                    });
+                });
+            });
+        });
+    }
+
+    public importDatabase(json): Observable<void> {
+        console.log(json);
+        return new Observable((observer) => {
+            // Wait until database is ready
+            this.getDatabaseReadyState().subscribe((ready: boolean) => {
+                if (!ready) {
+                    return;
+                }
+                this.sqlitePorter.wipeDb(this.database).then(() => {
+                    this.sqlitePorter.importJsonToDb(this.database, json).then(() => {
+                        observer.next();
+                    });
+                });
+            }, (err) => {
+                this.logger.error(err);
+                observer.error();
             });
         });
     }

@@ -1,0 +1,15 @@
+<header-component [title]="'Settings'" [isModal]="true" (onModalClose)="closeModal()"></header-component>
+
+<ion-content color="primary" [fullscreen]="true">
+    <ion-list>
+        <ion-item color="primary">
+            <ion-label>Export back-up</ion-label>
+            <ion-button color="secondary" shape="round" class="spacer-top-sm" (click)="exportBackup()">Export</ion-button>
+        </ion-item>
+        <ion-item color="primary">
+            <ion-label>Import back-up</ion-label>
+            <ion-input name="importBackup" type="file" accept="application/JSON" (change)="setImportFile($event)" required></ion-input>
+            <ion-button color="secondary" shape="round" class="spacer-top-sm" (click)="promptImportBackup()">Import</ion-button>
+        </ion-item>
+    </ion-list>
+</ion-content>

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { InfoComponent } from '../info/info.component';
 import { ModalController } from '@ionic/angular';
 import { ModalOptions } from '@ionic/core';
+import { SettingsComponent } from '../settings/settings.component';
 
 @Component({
     selector: 'header-popover-menu-component',
@@ -20,4 +21,13 @@ export class HeaderPopoverMenuComponent {
         const modal = await this.modalController.create(options);
         await modal.present();
       }
+      
+    public async openSettingsModal() {
+      const options: ModalOptions = {
+        component: SettingsComponent,
+        swipeToClose: true,
+      };
+      const modal = await this.modalController.create(options);
+      await modal.present();
+    }  
 }

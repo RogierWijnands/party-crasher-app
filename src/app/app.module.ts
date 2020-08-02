@@ -12,8 +12,11 @@ import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SQLite } from '@ionic-native/sqlite/ngx';
+import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { Badge } from '@ionic-native/badge/ngx';
+import { File } from '@ionic-native/file/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,10 +32,13 @@ import { Badge } from '@ionic-native/badge/ngx';
   ],
   providers: [
     Badge,
+    File,
     LocalNotifications,
     StatusBar,
+    SocialSharing,
     SplashScreen,
     SQLite,
+    SQLitePorter,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

@@ -10,8 +10,18 @@
     <param name="ios-package" value="CDVDevice"/>
   </feature>
 
+  <feature name="File">
+    <param name="ios-package" value="CDVFile"/>
+    <param name="onload" value="true"/>
+  </feature>
+
   <feature name="LocalNotification">
     <param name="ios-package" value="APPLocalNotification"/>
+  </feature>
+
+  <feature name="SocialSharing">
+    <param name="ios-package" value="SocialSharing"/>
+    <param name="onload" value="true"/>
   </feature>
 
   <feature name="SQLitePlugin">

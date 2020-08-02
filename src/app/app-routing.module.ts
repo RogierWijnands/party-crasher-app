@@ -10,6 +10,10 @@ const routes: Routes = [
     path: 'info',
     loadChildren: () => import('./info/info.module').then(m => m.InfoModule)
   },
+  {
+    path: 'settings',
+    loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule)
+  },
 ];
 @NgModule({
   imports: [
