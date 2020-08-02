@@ -16,6 +16,12 @@ export enum LocalStorageName {
     GAME_IN_PROGRESS = 'party_crasher_game_in_progress',
 }
 
+export enum MediaState {
+    PLAY = 'play',
+    STOP = 'stop',
+    PAUSE = 'pause',
+}
+
 export enum NotificationType {
     CHALLENGE = 'challenge',
 }

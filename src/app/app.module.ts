@@ -17,6 +17,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { Badge } from '@ionic-native/badge/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -39,6 +40,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
     SplashScreen,
     SQLite,
     SQLitePorter,
+    TextToSpeech,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

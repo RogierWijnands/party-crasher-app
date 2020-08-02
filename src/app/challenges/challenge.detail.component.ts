@@ -2,10 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ChallengeService } from '../shared/services/challenge.service';
 import { Challenge } from '../shared/models/challenge.model';
-import { ChallengeMode, ChallengeContent, ProgressItemStatus } from '../shared/enum';
+import { ChallengeMode, ChallengeContent, ProgressItemStatus, MediaState } from '../shared/enum';
 import { Game } from '../shared/models/game.model';
 import { GameService } from '../shared/services/game.service';
 import { ProgressItem } from '../shared/models/progress-item.model';
+import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
+import { getNavigatorLanguage } from '../lib/util/get-language';
 
 @Component({
   selector: 'challenge-detail-component',
@@ -14,6 +16,9 @@ import { ProgressItem } from '../shared/models/progress-item.model';
 export class ChallengeDetailComponent implements OnInit {
   public readonly ChallengeContent = ChallengeContent;
   public readonly ChallengeMode = ChallengeMode;
+  public readonly MediaState = MediaState;
+  
+  public ttsState: MediaState = MediaState.STOP;
 
   @Input() public mode: ChallengeMode = ChallengeMode.EDIT;
   @Input() public game: Game;
@@ -28,6 +33,7 @@ export class ChallengeDetailComponent implements OnInit {
       private modalController: ModalController,
       private challengeService: ChallengeService,
       private gameService: GameService,
+      private tts: TextToSpeech,
   ) {}
 
   public ngOnInit(): void {
@@ -92,5 +98,22 @@ export class ChallengeDetailComponent implements OnInit {
 
     // Update game data
     this.gameService.saveGame(this.game).subscribe();
+  }
+
+  public playTTS(value: string): void {
+    // Strip out HTML tags
+    const tempEl = document.createElement('div');
+    tempEl.innerHTML = value;
+    const toRead = tempEl.innerText;
+
+    // Stop reading before reading new value
+    this.tts.speak('');
+    this.ttsState = MediaState.PLAY;
+    this.tts.speak({text: toRead, locale: getNavigatorLanguage()}).then(() => this.ttsState = MediaState.STOP);
+  }
+
+  public stopTTS(): void {
+    this.tts.speak('');
+    this.ttsState = MediaState.STOP;
   }
 }

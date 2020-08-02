@@ -94,6 +94,11 @@ export class GameService {
                     game.startDateTime = moment().startOf('minute').toDate();
                 }
 
+                // If end date is before start date, set end date to 1 minute after start date time
+                if (moment(game.endDateTime).isSameOrBefore(moment(game.startDateTime), 'seconds')) {
+                    game.endDateTime = moment(game.startDateTime).add(1, 'minutes').endOf('minute').toDate();
+                }
+
                 // Schedule notifications
                 this.scheduleNotifications(game).subscribe((_game) => _saveGame(_game));
             } else {
