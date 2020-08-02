@@ -28,7 +28,7 @@ export class PlayDetailComponent implements OnInit {
       private modalController: ModalController,
       private friendsService: FriendsService,
       private challengeService: ChallengeService,
-      private gameService: GameService,
+      public gameService: GameService,
   ) {}
 
   public ngOnInit(): void {

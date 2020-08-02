@@ -22,7 +22,7 @@ export class PlayComponent {
     public gameService: GameService,
   ) {}
 
-  public async openModal(game: Game) {
+  public async openModal(game?: Game) {
     const options: ModalOptions = {
       component: PlayDetailComponent,
       swipeToClose: true,
