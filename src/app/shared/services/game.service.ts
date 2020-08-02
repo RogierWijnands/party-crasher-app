@@ -3,12 +3,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalStorageName, NotificationType, ProgressItemStatus, ChallengeMode } from '../enum';
 import { Game } from '../models/game.model';
 import { GameOptions, NotificationData } from '../interfaces';
-import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { LocalNotifications, ILocalNotification } from '@ionic-native/local-notifications/ngx';
 import { Platform, ModalController } from '@ionic/angular';
 import { ProgressItem } from '../models/progress-item.model';
 import { ModalOptions } from '@ionic/core';
 import { ChallengeDetailComponent } from 'src/app/challenges/challenge.detail.component';
 import * as moment from 'moment';
+import { shuffleArray } from 'src/app/lib/util/shuffle-array';
 
 @Injectable({
     providedIn: 'root'
@@ -84,6 +85,7 @@ export class GameService {
                 this.setGameInProgressStatus();
                 observer.next();
             }
+            // If is new game
             if (!this.isGameInProgress) {
                 // Parse start and end date times before scheduling game
                 game.startDateTime = moment(game.startDateTime).startOf('minute').toDate();
@@ -98,6 +100,9 @@ export class GameService {
                 if (moment(game.endDateTime).isSameOrBefore(moment(game.startDateTime), 'seconds')) {
                     game.endDateTime = moment(game.startDateTime).add(1, 'minutes').endOf('minute').toDate();
                 }
+
+                // Randomize player order
+                game.players = shuffleArray(game.players);
 
                 // Schedule notifications
                 this.scheduleNotifications(game).subscribe((_game) => _saveGame(_game));
@@ -133,10 +138,12 @@ export class GameService {
                 const duration = moment.duration(moment(game.endDateTime).diff(moment(game.startDateTime))).asSeconds();
                 const increment = duration / amountOfChallenges;
                 let triggerAt = moment(game.startDateTime).add(increment/2, 'seconds');
+                const notifications: ILocalNotification[] = [];
 
                 // Set notifications for each challenge
-                Array(amountOfChallenges).fill('').forEach(() => {
-                    this.localNotifications.schedule({
+                Array(amountOfChallenges).fill('').forEach((_amountOfChallenges, challengeIndex) => {
+                    notifications.push({
+                        id: challengeIndex + 1,
                         text: this.gameOptions.notificationOptions.notificationMessage,
                         trigger: {at: triggerAt.toDate()},
                         foreground: true,
@@ -159,6 +166,9 @@ export class GameService {
                     // Increment the trigger time for the next notification
                     triggerAt = triggerAt.add(increment, 'seconds');
                 });
+
+                // Schedule notifications
+                this.localNotifications.schedule(notifications);
 
                 observer.next(game);
             });
