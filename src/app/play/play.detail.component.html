@@ -6,11 +6,11 @@
             <ion-label position="floating">Title</ion-label>
             <ion-input name="title" [(ngModel)]="tempGame.title" autocapitalize="on" required></ion-input>
         </ion-item>
-        <ion-item color="primary">
+        <ion-item color="primary" *ngIf="!gameInProgress">
             <ion-label position="floating">Start time</ion-label>
             <ion-datetime displayFormat="D MMM YYYY H:mm" name="startDateTime" [(ngModel)]="tempGame.startDateTime" required></ion-datetime>
         </ion-item>
-        <ion-item color="primary">
+        <ion-item color="primary" *ngIf="!gameInProgress">
             <ion-label position="floating">End time</ion-label>
             <ion-datetime displayFormat="D MMM YYYY H:mm" name="endDateTime" [(ngModel)]="tempGame.endDateTime" required></ion-datetime>
         </ion-item>
@@ -37,7 +37,7 @@
                     !tempGame.players || 
                     !tempGame.players.length ||
                     (
-                        !(gameService.game$ | async) &&
+                        !gameInProgress &&
                         (
                             (!moment(tempGame.startDateTime).startOf('minute').isSameOrAfter(moment(), 'minutes')) ||
                             (moment(tempGame.startDateTime).isAfter(moment(tempGame.endDateTime), 'minutes'))   

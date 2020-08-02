@@ -16,12 +16,14 @@ export class PlayDetailComponent implements OnInit {
   public readonly moment = moment;
   public friends: Friend[] = [];
   public challenges: Challenge[] = [];
+  public gameInProgress: boolean = false;
 
   public tempGame: Game = new Game();
   @Input('game') set game(_game: Game) {
     this.tempGame = new Game(_game);
     if (this.tempGame.startDateTime instanceof Date) this.tempGame.startDateTime = this.tempGame.startDateTime.toISOString();
     if (this.tempGame.endDateTime instanceof Date) this.tempGame.endDateTime = this.tempGame.endDateTime.toISOString();
+    this.gameInProgress = true;
   }
 
   constructor(
