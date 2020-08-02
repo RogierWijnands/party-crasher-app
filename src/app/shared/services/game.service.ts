@@ -184,14 +184,14 @@ export class GameService {
         // Get date times of each set challenge
         // Check for latest with date time that has passed with a to do status
         // If found, activate challenge
-        const todoChallenges: ProgressItem[] = [];
+        let latestChallenge: ProgressItem;
         game.progress.forEach(progressItem => {
-            if (moment(progressItem.dateTime).isSameOrBefore(moment(), 'seconds') && progressItem.status === ProgressItemStatus.TO_DO) {
-                todoChallenges.push(progressItem);
+            if (moment(progressItem.dateTime).isSameOrBefore(moment(), 'seconds')) {
+                latestChallenge = progressItem;
             }
         });
-        if (todoChallenges.length > 0) {
-            this.openChallengeModal(game, todoChallenges.pop())
+        if (latestChallenge.status === ProgressItemStatus.TO_DO) {
+            this.openChallengeModal(game, latestChallenge);
         }
     }
 
