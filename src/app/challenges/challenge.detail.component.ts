@@ -60,12 +60,11 @@ export class ChallengeDetailComponent implements OnInit {
       !this.game.challenges.length ||
       !this.game.players ||
       !this.game.players.length
-      ) {
+    ) {
       this.closeModal();
-      return;
-    }
-
-    // Pick random challenge
+      this.gameService.quitGame().subscribe();
+    } else {
+      // Pick random challenge
     this.tempChallenge = new Challenge(this.game.challenges[Math.floor(Math.random() * this.game.challenges.length)]);
     // Remove randomly picked challenge from game
     this.game.challenges = this.game.challenges.filter(_challenge => _challenge.id !== this.tempChallenge.id);
@@ -98,6 +97,7 @@ export class ChallengeDetailComponent implements OnInit {
 
     // Update game data
     this.gameService.saveGame(this.game).subscribe();
+    }
   }
 
   public playTTS(value: string): void {

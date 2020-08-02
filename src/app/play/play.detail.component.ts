@@ -23,7 +23,7 @@ export class PlayDetailComponent implements OnInit {
     this.tempGame = new Game(_game);
     if (this.tempGame.startDateTime instanceof Date) this.tempGame.startDateTime = this.tempGame.startDateTime.toISOString();
     if (this.tempGame.endDateTime instanceof Date) this.tempGame.endDateTime = this.tempGame.endDateTime.toISOString();
-    this.gameInProgress = true;
+    this.gameInProgress = moment(this.tempGame.startDateTime).isSameOrBefore(moment(), 'seconds');
   }
 
   constructor(
