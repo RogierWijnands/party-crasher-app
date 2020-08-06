@@ -19,11 +19,11 @@ export class GameService {
     private isGameInProgress: boolean = false;
     private checkGameStatusInterval: any;
     private gameOptions: GameOptions = {
-        minChallengesPerGame: 5,
-        maxChallengesPerGame: 20,
+        minChallengesPerGame: 3,
+        maxChallengesPerGame: 15,
         notificationOptions: {
             notificationMessage: 'Oh oh, your party is being crashed! A new challenge awaits...😰',
-            notificationSound: '',
+            notificationSound: this.platform.is('ios') ? 'res://public/assets/sound/alarm.caf' : 'res://public/assets/sound/alarm.mp3',
         },
     }
 
@@ -176,7 +176,7 @@ export class GameService {
                             badge: 1,
                             priority: 2,
                             wakeup: true,
-                            sound: this.platform.is('ios') ? 'res://public/assets/sound/alarm.caf' : 'res://public/assets/sound/alarm.mp3',
+                            sound: this.gameOptions.notificationOptions.notificationSound,
                             data: <NotificationData> {
                                 notificationType: NotificationType.CHALLENGE,
                             }
@@ -211,8 +211,10 @@ export class GameService {
             !(game instanceof Game) || 
             !game.challenges || 
             !game.challenges.length ||
-            !game.players ||
-            !game.players.length
+            !(
+                (game.players && game.players.length) ||
+                (game.playersPassed && game.playersPassed.length)
+            )
         ) {
             this.quitGame().subscribe();
         } else {

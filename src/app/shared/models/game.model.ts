@@ -7,6 +7,7 @@ export class Game {
     public startDateTime: Date|string;
     public endDateTime: Date|string;
     public players: Friend[];
+    public playersPassed: Friend[];
     public challenges: Challenge[];
     public progress: ProgressItem[];
 
@@ -15,6 +16,7 @@ export class Game {
         this.setStartDateTime(game.startDateTime);
         this.setEndDateTime(game.endDateTime);
         this.setPlayers(game.players);
+        this.setPlayersPassed(game.playersPassed);
         this.setChallenges(game.challenges);
         this.setProgress(game.progress);
     }
@@ -44,6 +46,12 @@ export class Game {
     public setPlayers(players: Friend[]): void {
         if (Array.isArray(players)) {
             this.players = players.map(player => new Friend(player));
+        }
+    }
+
+    public setPlayersPassed(players: Friend[]): void {
+        if (Array.isArray(players)) {
+            this.playersPassed = players.map(player => new Friend(player));
         }
     }
 

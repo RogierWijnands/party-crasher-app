@@ -8,6 +8,8 @@ import { GameService } from '../shared/services/game.service';
 import { ProgressItem } from '../shared/models/progress-item.model';
 import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 import { getNavigatorLanguage } from '../lib/util/get-language';
+import { Friend } from '../shared/models/friend.model';
+import { shuffleArray } from '../lib/util/shuffle-array';
 
 @Component({
   selector: 'challenge-detail-component',
@@ -43,7 +45,8 @@ export class ChallengeDetailComponent implements OnInit {
   }
 
   public closeModal(data?: {[key: string]: any}): void {
-      this.modalController.dismiss(data);
+    this.tts.speak('');
+    this.modalController.dismiss(data);
   }
 
   public save(): void {
@@ -58,8 +61,10 @@ export class ChallengeDetailComponent implements OnInit {
       !(this.game instanceof Game) || 
       !this.game.challenges || 
       !this.game.challenges.length ||
-      !this.game.players ||
-      !this.game.players.length
+      !(
+        (this.game.players && this.game.players.length) ||
+        (this.game.playersPassed && this.game.playersPassed.length)
+      )
     ) {
       this.closeModal();
       this.gameService.quitGame().subscribe();
@@ -75,12 +80,29 @@ export class ChallengeDetailComponent implements OnInit {
     if (splitChallengeDesc.length > 1) {
       splitChallengeDesc.forEach((descPart, i) => {
         if (i !== splitChallengeDesc.length - 1) {
+          // Check if a player is available, otherwise return all passed players not in current challenge back to players list in random order
+          if ((!this.game.players || !this.game.players.length) && this.game.playersPassed && this.game.playersPassed.length) {
+            this.game.playersPassed = this.game.playersPassed.filter((_player) => {
+              if (challengeDesc.includes(_player.getFullName())) {
+                return true; 
+              } else {
+                this.game.players.push(_player);
+                return false;
+              }
+            });
+            this.game.players = shuffleArray(this.game.players).map(_player => new Friend(_player));
+          }
           // Pick first player
-        const pickPlayer = this.game.players.shift();
-        // Move picked player to end of players list
-        this.game.players.push(pickPlayer);
-        // Add player name to challenge description part
-        descPart += `<strong>${pickPlayer.getFullName()}</strong>`; 
+          const pickPlayer = (this.game.players) ? this.game.players.shift() : undefined;
+          if (pickPlayer instanceof Friend) {
+            // Move picked player to players passed list
+            if (!this.game.playersPassed) this.game.playersPassed = [];
+            this.game.playersPassed.push(pickPlayer);
+            // Add player name to challenge description part
+            descPart += `<strong>${pickPlayer.getFullName()}</strong>`; 
+          } else {
+            descPart += `<strong>No player available</strong>`;
+          }
         }
         challengeDesc += descPart;
       });

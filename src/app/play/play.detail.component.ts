@@ -21,8 +21,15 @@ export class PlayDetailComponent implements OnInit {
   public tempGame: Game = new Game();
   @Input('game') set game(_game: Game) {
     this.tempGame = new Game(_game);
+    // Format dates for ion-datetime
     if (this.tempGame.startDateTime instanceof Date) this.tempGame.startDateTime = this.tempGame.startDateTime.toISOString();
     if (this.tempGame.endDateTime instanceof Date) this.tempGame.endDateTime = this.tempGame.endDateTime.toISOString();
+    // Move all players from passedPlayers back to players
+    if (this.tempGame.players && this.tempGame.playersPassed && this.tempGame.playersPassed.length) {
+      this.tempGame.players = [...this.tempGame.players, ...this.tempGame.playersPassed];
+      this.tempGame.playersPassed = [];
+    }
+    // Check if game is already in progress
     this.gameInProgress = moment(this.tempGame.startDateTime).isSameOrBefore(moment(), 'seconds');
   }
 
