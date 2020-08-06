@@ -45,7 +45,9 @@ export class ChallengeDetailComponent implements OnInit {
   }
 
   public closeModal(data?: {[key: string]: any}): void {
-    this.tts.speak('');
+    if (this.mode === ChallengeMode.PLAY) {
+      this.stopTTS();
+    }
     this.modalController.dismiss(data);
   }
 

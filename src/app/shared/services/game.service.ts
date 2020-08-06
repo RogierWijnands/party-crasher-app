@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalStorageName, NotificationType, ProgressItemStatus, ChallengeMode } from '../enum';
 import { Game } from '../models/game.model';
-import { GameOptions, NotificationData } from '../interfaces';
+import { NotificationData } from '../interfaces';
 import { LocalNotifications, ILocalNotification } from '@ionic-native/local-notifications/ngx';
 import { Platform, ModalController, AlertController } from '@ionic/angular';
 import { ProgressItem } from '../models/progress-item.model';
@@ -10,6 +10,7 @@ import { ModalOptions } from '@ionic/core';
 import { ChallengeDetailComponent } from 'src/app/challenges/challenge.detail.component';
 import * as moment from 'moment';
 import { shuffleArray } from 'src/app/lib/util/shuffle-array';
+import { LoggerService } from './log.service';
 
 @Injectable({
     providedIn: 'root'
@@ -18,20 +19,13 @@ export class GameService {
     private game: BehaviorSubject<Game|undefined> = new BehaviorSubject(undefined);
     private isGameInProgress: boolean = false;
     private checkGameStatusInterval: any;
-    private gameOptions: GameOptions = {
-        minChallengesPerGame: 3,
-        maxChallengesPerGame: 15,
-        notificationOptions: {
-            notificationMessage: 'Oh oh, your party is being crashed! A new challenge awaits...😰',
-            notificationSound: this.platform.is('ios') ? 'res://public/assets/sound/alarm.caf' : 'res://public/assets/sound/alarm.mp3',
-        },
-    }
 
     constructor(
         private platform: Platform,
         private localNotifications: LocalNotifications,
         private modalController: ModalController,
         private alertController: AlertController,
+        private logger: LoggerService,
     ) {
         this.initActiveGame();
         this.checkGameStatus();
@@ -150,13 +144,17 @@ export class GameService {
 
     private scheduleNotifications(game: Game): Observable<Game> {
         return new Observable((observer) => {
+            if (!game.minChallenges || !game.maxChallenges) {
+                this.logger.error('Either min. or max. amount of challenges is invalid. Try again.');
+                observer.error();
+            }
             this.platform.ready().then(() => {
                 // Calculate notifications schedule
-                const minChallengesPerGame = Math.min(this.gameOptions.minChallengesPerGame, game.challenges.length);
-                const maxChallengesPerGame = Math.min(this.gameOptions.maxChallengesPerGame, game.challenges.length);
-                let amountOfChallenges = (maxChallengesPerGame === minChallengesPerGame) ? maxChallengesPerGame : Math.floor(Math.random() * maxChallengesPerGame) + minChallengesPerGame;
-                if (amountOfChallenges > this.gameOptions.maxChallengesPerGame) {
-                    amountOfChallenges = this.gameOptions.maxChallengesPerGame;
+                const minChallengesPerGame = Math.min(game.minChallenges, game.challenges.length);
+                const maxChallengesPerGame = Math.min(game.maxChallenges, game.challenges.length);
+                let amountOfChallenges = (minChallengesPerGame >= maxChallengesPerGame) ? maxChallengesPerGame : Math.floor(Math.random() * maxChallengesPerGame) + minChallengesPerGame;
+                if (amountOfChallenges > game.maxChallenges) {
+                    amountOfChallenges = game.maxChallenges;
                 }
                 const duration = moment.duration(moment(game.endDateTime).diff(moment(game.startDateTime))).asSeconds();
                 const increment = duration / amountOfChallenges;
@@ -169,14 +167,14 @@ export class GameService {
                     if (!triggerAt.isAfter(moment(game.endDateTime), 'seconds')) {
                         notifications.push({
                             id: challengeIndex + 1,
-                            text: this.gameOptions.notificationOptions.notificationMessage,
+                            text: 'Oh oh, your party is being crashed! A new challenge awaits...😰',
                             trigger: {at: triggerAt.toDate()},
                             foreground: true,
                             vibrate: true,
                             badge: 1,
                             priority: 2,
                             wakeup: true,
-                            sound: this.gameOptions.notificationOptions.notificationSound,
+                            sound: this.platform.is('ios') ? 'res://public/assets/sound/alarm.caf' : 'res://public/assets/sound/alarm.mp3',
                             data: <NotificationData> {
                                 notificationType: NotificationType.CHALLENGE,
                             }

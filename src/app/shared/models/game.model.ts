@@ -8,6 +8,8 @@ export class Game {
     public endDateTime: Date|string;
     public players: Friend[];
     public playersPassed: Friend[];
+    public minChallenges: number = 3;
+    public maxChallenges: number = 15;
     public challenges: Challenge[];
     public progress: ProgressItem[];
 
@@ -18,6 +20,8 @@ export class Game {
         this.setPlayers(game.players);
         this.setPlayersPassed(game.playersPassed);
         this.setChallenges(game.challenges);
+        this.setMinChallenges(game.minChallenges);
+        this.setMaxChallenges(game.maxChallenges);
         this.setProgress(game.progress);
     }
 
@@ -58,6 +62,18 @@ export class Game {
     public setChallenges(challenges: Challenge[]): void {
         if (Array.isArray(challenges)) {
             this.challenges = challenges.map(challenge => new Challenge(challenge));
+        }
+    }
+
+    public setMinChallenges(minChallenges: number): void {
+        if (typeof minChallenges === 'number') {
+            this.minChallenges = minChallenges;
+        }
+    }
+
+    public setMaxChallenges(maxChallenges: number): void {
+        if (typeof maxChallenges === 'number') {
+            this.maxChallenges = maxChallenges;
         }
     }
 
