@@ -165,20 +165,21 @@ export class GameService {
                 // Set notifications for each challenge
                 Array(amountOfChallenges).fill('').forEach((_amountOfChallenges, challengeIndex) => {
                     if (!triggerAt.isAfter(moment(game.endDateTime), 'seconds')) {
-                        notifications.push({
+                        const notificationOptions: ILocalNotification = {
                             id: challengeIndex + 1,
                             text: 'Oh oh, your party is being crashed! A new challenge awaits...😰',
+                            sound: this.platform.is('ios') ? 'res://public/assets/sound/alarm.caf' : 'res://raw/alarm',
                             trigger: {at: triggerAt.toDate()},
                             foreground: true,
                             vibrate: true,
                             badge: 1,
                             priority: 2,
                             wakeup: true,
-                            sound: this.platform.is('ios') ? 'res://public/assets/sound/alarm.caf' : 'res://public/assets/sound/alarm.mp3',
                             data: <NotificationData> {
                                 notificationType: NotificationType.CHALLENGE,
                             }
-                        });
+                        };
+                        notifications.push(notificationOptions);
     
                         // Set game progress items for each notification created
                         game.progress.push(new ProgressItem({ status: ProgressItemStatus.TO_DO, dateTime: triggerAt.toDate() }))

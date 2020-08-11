@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ModalController, AlertController } from '@ionic/angular';
+import { ModalController, AlertController, Platform } from '@ionic/angular';
 import { DatabaseService } from '../shared/services/database.service';
 import { LoggerService } from '../shared/services/log.service';
 
@@ -15,6 +15,7 @@ export class SettingsComponent {
         private alertController: AlertController,
         private databaseService: DatabaseService,
         private logger: LoggerService,
+        private platform: Platform,
     ) {}
 
     public closeModal(): void {
@@ -60,12 +61,13 @@ export class SettingsComponent {
         }
 
         // Cordova FileReader polyfill workaround (onload otherwise won't work on mobile)
-        let fr = new FileReader(); 
-        let rfr = (fr as any)._realReader;
-        FileReader = rfr.constructor;
-
+        if (this.platform.is('ios')) {
+          let fr = new FileReader(); 
+          let rfr = (fr as any)._realReader;
+          FileReader = rfr.constructor;
+        }
         const reader = new FileReader();
-        reader.onload = (event) => {
+        (this.platform.is('ios') ? reader : (reader as any)._realReader).onload = (event) => {
             this.databaseService.importDatabase(event.target.result).subscribe(() => {
                 window.location.reload();
             });
