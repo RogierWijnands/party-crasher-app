@@ -10,3 +10,6 @@ plugins/
 # Builds
 dist/
 www/
+
+# Mac
+**/.DS_Store
