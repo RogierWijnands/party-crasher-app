@@ -13,3 +13,6 @@ www/
 
 # Mac
 **/.DS_Store
+
+# Android
+.gradle/
