@@ -1,0 +1,13 @@
+{
+  "appId": "com.partycrasher.app",
+  "appName": "party-crasher-app",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}
